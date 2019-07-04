@@ -1,9 +1,9 @@
 package net.thumbtack.onlineshop.config;
 
-import net.thumbtack.onlineshop.entity.Administrator;
-import net.thumbtack.onlineshop.entity.Category;
-import net.thumbtack.onlineshop.entity.Client;
-import net.thumbtack.onlineshop.entity.Product;
+import net.thumbtack.onlineshop.repository.mapper.AdministratorMapper;
+import net.thumbtack.onlineshop.repository.mapper.CategoryMapper;
+import net.thumbtack.onlineshop.repository.mapper.ClientMapper;
+import net.thumbtack.onlineshop.repository.mapper.ProductMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,22 +11,24 @@ import org.springframework.context.annotation.Configuration;
 public class Config {
 
     @Bean
-    Administrator administrator() {
-        return new Administrator();
+    public AdministratorMapper administratorMapper() {
+        return new AdministratorMapper();
     }
 
     @Bean
-    Client client() {
-        return new Client();
+    public ClientMapper clientMapper() {
+        return new ClientMapper();
     }
 
     @Bean
-    Product product() {
-        return new Product();
+    public ProductMapper productMapper() {
+        return new ProductMapper();
     }
 
     @Bean
-    Category category() {
-        return new Category();
+    public CategoryMapper categoryMapper() {
+        return new CategoryMapper();
     }
+
+
 }

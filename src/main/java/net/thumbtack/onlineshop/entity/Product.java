@@ -20,4 +20,15 @@ public class Product {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", count=" + count +
+                ", categories=" + categories +
+                '}';
+    }
 }

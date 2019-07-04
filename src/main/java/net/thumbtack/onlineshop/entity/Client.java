@@ -50,4 +50,20 @@ public class Client extends User {
     public void setDeposit(long deposit) {
         this.deposit = deposit;
     }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + getId() +
+                ", firstName='" + getFirstName() + '\'' +
+                ", lastName='" + getLastName() + '\'' +
+                ", patronymic='" + getPatronymic() + '\'' +
+                ", login='" + getLogin() + '\'' +
+                ", password='" + getPassword() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", address='" + getAddress() + '\'' +
+                ", phone='" + getPhone() + '\'' +
+                ", deposit='" + getDeposit() + '\'' +
+                '}';
+    }
 }

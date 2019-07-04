@@ -21,4 +21,17 @@ public class Administrator extends User {
         this.position = position;
     }
 
+    @Override
+    public String toString() {
+        return "Administrator{" +
+                "id=" + getId() +
+                ", firstName='" + getFirstName() + '\'' +
+                ", lastName='" + getLastName() + '\'' +
+                ", patronymic='" + getPatronymic() + '\'' +
+                ", login='" + getLogin() + '\'' +
+                ", password='" + getPassword() + '\'' +
+                ", position='" + getPosition() + '\'' +
+                '}';
+    }
+
 }
