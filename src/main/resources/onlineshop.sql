@@ -1,0 +1,69 @@
+DROP DATABASE IF EXISTS onlineshop;
+CREATE DATABASE onlineshop;
+USE onlineshop;
+
+CREATE TABLE administrator (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  firstName VARCHAR(50) NOT NULL,
+  lastName VARCHAR(50) NOT NULL,
+  patronymic VARCHAR(50),
+  position VARCHAR(50) NOT NULL,
+  login VARCHAR(50) NOT NULL,
+  password VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE client (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  firstName VARCHAR(50) NOT NULL,
+  lastName VARCHAR(50) NOT NULL,
+  patronymic VARCHAR(50),
+  email VARCHAR(50) NOT NULL,
+  address VARCHAR(50) NOT NULL,
+  phone VARCHAR(50) NOT NULL,
+  login VARCHAR(50) NOT NULL,
+  deposit INT(11) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE cart (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  clientId INT(11) NOT NULL,
+  FOREIGN KEY (clientId) REFERENCES client(id),
+  PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE cart_item (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  cartId INT(11) NOT NULL,
+  productId INT(11) NOT NULL,
+  count INT(11) NOT NULL,
+  FOREIGN KEY (cartId) REFERENCES cart(id),
+  FOREIGN KEY (productId) REFERENCES product(id),
+  PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE product (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  name VARCHAR (50) NOT NULL,
+  price INT(11) NOT NULL,
+  count INT(11) NOt NULL,
+  PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE product_category (
+  productId INT(11),
+  categoryId INT(11),
+  FOREIGN KEY (productId) REFERENCES product(id),
+  FOREIGN KEY (categoryId) REFERENCES category(id),
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE category (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  parentId INT(11),
+  parentName VARCHAR(50) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+
