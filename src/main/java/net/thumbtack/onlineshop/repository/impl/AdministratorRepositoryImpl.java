@@ -5,6 +5,8 @@ import net.thumbtack.onlineshop.repository.iface.AdministratorRepository;
 import net.thumbtack.onlineshop.repository.mapper.AdministratorMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.List;
+
 public class AdministratorRepositoryImpl implements AdministratorRepository {
     private JdbcTemplate jdbcTemplate;
     private AdministratorMapper administratorMapper;
@@ -19,7 +21,7 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
         if (administrator == null) {
             throw new IllegalArgumentException();
         }
-        jdbcTemplate.update("INSERT INTO administrators " +
+        jdbcTemplate.update("INSERT INTO administrator " +
                 "(firstName, lastName, patronymic, login, password, position) VALUES (?,?,?,?,?,?)",
                 administrator.getFirstName(),
                 administrator.getLastName(),
@@ -42,5 +44,10 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
     @Override
     public void updateAdministrator(Administrator administrator) {
 
+    }
+
+    @Override
+    public List<Administrator> getAllAdmins() {
+        return null;
     }
 }

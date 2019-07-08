@@ -13,6 +13,6 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public void registry(Administrator administrator){
-
+        administratorRepository.addAdministrator(administrator);
     }
 }

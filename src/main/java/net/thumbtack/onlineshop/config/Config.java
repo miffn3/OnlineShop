@@ -36,7 +36,7 @@ public class Config {
     }
 
     @Bean
-    public AdministratorRepository personRepository(JdbcTemplate jdbcTemplate, AdministratorMapper administratorMapper) {
+    public AdministratorRepository administratorRepository(JdbcTemplate jdbcTemplate, AdministratorMapper administratorMapper) {
         return new AdministratorRepositoryImpl(jdbcTemplate, administratorMapper);
     }
 
