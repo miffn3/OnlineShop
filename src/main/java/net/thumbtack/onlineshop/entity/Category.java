@@ -4,7 +4,7 @@ public class Category {
 
     private long id;
     private String name;
-    private long parentId;
+    private Long parentId;
     private String parentName;
 
     public Category() {

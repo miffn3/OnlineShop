@@ -1,5 +1,6 @@
 package net.thumbtack.onlineshop.config;
 
+import com.google.gson.Gson;
 import net.thumbtack.onlineshop.repository.iface.AdministratorRepository;
 import net.thumbtack.onlineshop.repository.impl.AdministratorRepositoryImpl;
 import net.thumbtack.onlineshop.repository.mapper.AdministratorMapper;
@@ -43,5 +44,10 @@ public class Config {
     @Bean
     public AdministratorService administratorService(AdministratorRepository administratorRepository) {
         return new AdministratorServiceImpl(administratorRepository);
+    }
+
+    @Bean
+    public Gson gson() {
+        return new Gson();
     }
 }

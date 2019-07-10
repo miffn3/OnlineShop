@@ -14,10 +14,11 @@ CREATE TABLE client (
   firstName VARCHAR(50) NOT NULL,
   lastName VARCHAR(50) NOT NULL,
   patronymic VARCHAR(50),
+  login VARCHAR(50) NOT NULL,
+  password VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL,
   address VARCHAR(50) NOT NULL,
   phone VARCHAR(50) NOT NULL,
-  login VARCHAR(50) NOT NULL,
   deposit INT(11) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;

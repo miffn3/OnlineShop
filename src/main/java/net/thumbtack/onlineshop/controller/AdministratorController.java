@@ -5,6 +5,7 @@ import net.thumbtack.onlineshop.service.iface.AdministratorService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("api/admins")
 public class AdministratorController {
     private final AdministratorService administratorService;
 
@@ -12,7 +13,7 @@ public class AdministratorController {
         this.administratorService = administratorService;
     }
 
-    @PostMapping("api/admins")
+    @PostMapping("/")
     public void registerAdmin(@RequestBody Administrator administrator){
         this.administratorService.registry(administrator);
     }
