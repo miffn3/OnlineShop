@@ -7,10 +7,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CategoryRepositoryImpl implements CategoryRepository {
     private JdbcTemplate jdbcTemplate;
     private CategoryMapper categoryMapper;
+
+    public CategoryRepositoryImpl(JdbcTemplate jdbcTemplate, CategoryMapper categoryMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.categoryMapper = categoryMapper;
+    }
 
     @Override
     public void addCategory(Category category){
@@ -30,18 +36,36 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 
     @Override
     public void deleteCategory(int id){
-
+        jdbcTemplate.update("DELETE FROM category WHERE id=?", id);
     }
 
     @Override
     public void updateCategory(Category category){
-
+        if (category == null) {
+            throw new IllegalArgumentException();
+        }
+        jdbcTemplate.update("UPDATE category SET" +
+                        "name = ?, parentName = ?, parentId = ? WHERE id = ?",
+                category.getName(),
+                category.getParentName(),
+                category.getParentId(),
+                category.getId());
     }
 
     @Override
     public List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
 
-        return null;
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM administrator");
+        rows.forEach(row -> {
+            Category category = new Category();
+            category.setId((int)row.get("id"));
+            category.setName((String)row.get("name"));
+            category.setParentName((String)row.get("parentName"));
+            category.setParentId((int)row.get("parentId"));
+            categories.add(category);
+        });
+
+        return categories;
     }
 }

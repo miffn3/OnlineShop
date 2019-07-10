@@ -4,6 +4,8 @@ import net.thumbtack.onlineshop.entity.Administrator;
 import net.thumbtack.onlineshop.repository.iface.AdministratorRepository;
 import net.thumbtack.onlineshop.service.iface.AdministratorService;
 
+import java.util.List;
+
 public class AdministratorServiceImpl implements AdministratorService {
     private final AdministratorRepository administratorRepository;
 
@@ -12,7 +14,17 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public void registry(Administrator administrator){
-        administratorRepository.addAdministrator(administrator);
+    public int registration(Administrator administrator){
+        return administratorRepository.addAdministrator(administrator);
+    }
+
+    @Override
+    public List<Administrator> getAllAdministrators() {
+        return administratorRepository.getAllAdmins();
+    }
+
+    @Override
+    public void editAdmin(Administrator administrator) {
+        this.administratorRepository.updateAdministrator(administrator);
     }
 }

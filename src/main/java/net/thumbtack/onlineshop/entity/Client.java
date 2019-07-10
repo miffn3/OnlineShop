@@ -5,13 +5,13 @@ public class Client extends User {
     private String email;
     private String address;
     private String phone;
-    private long deposit;
+    private int deposit;
 
     public Client() {
     }
 
-    public Client(long id, String firstName, String lastName, String patronymic, String login,
-                  String password, String email, String address, String phone, long deposit) {
+    public Client(int id, String firstName, String lastName, String patronymic, String login,
+                  String password, String email, String address, String phone, int deposit) {
         super(id, firstName, lastName, patronymic, login, password);
         this.email = email;
         this.address = address;
@@ -43,11 +43,11 @@ public class Client extends User {
         this.phone = phone;
     }
 
-    public long getDeposit() {
+    public int getDeposit() {
         return deposit;
     }
 
-    public void setDeposit(long deposit) {
+    public void setDeposit(int deposit) {
         this.deposit = deposit;
     }
 

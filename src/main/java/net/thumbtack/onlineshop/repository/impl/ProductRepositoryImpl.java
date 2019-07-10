@@ -13,6 +13,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     private JdbcTemplate jdbcTemplate;
     private ProductMapper productMapper;
 
+    public ProductRepositoryImpl(JdbcTemplate jdbcTemplate, ProductMapper productMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.productMapper = productMapper;
+    }
+
     @Override
     public void addProduct(Product product){
         if(product == null) {
@@ -32,7 +37,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void deleteProduct(int id) {
-
+        jdbcTemplate.update("DELETE FROM product WHERE id=?", id);
     }
 
     @Override

@@ -13,6 +13,11 @@ public class ClientRepositoryImpl implements ClientRepository {
     private JdbcTemplate jdbcTemplate;
     private ClientMapper clientMapper;
 
+    public ClientRepositoryImpl(JdbcTemplate jdbcTemplate, ClientMapper clientMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.clientMapper = clientMapper;
+    }
+
     @Override
     public void addClient(Client client){
         if (client == null) {
@@ -40,7 +45,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public void deleteClient(int id){
-
+        jdbcTemplate.update("DELETE FROM client WHERE id=?", id);
     }
 
     @Override
@@ -54,7 +59,7 @@ public class ClientRepositoryImpl implements ClientRepository {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM client");
         rows.forEach(row -> {
             Client client = new Client();
-            client.setId((long)row.get("id"));
+            client.setId((int)row.get("id"));
             client.setFirstName((String)row.get("firstName"));
             client.setLastName((String)row.get("lastName"));
             client.setPatronymic((String)row.get("patronymic"));
@@ -63,7 +68,7 @@ public class ClientRepositoryImpl implements ClientRepository {
             client.setEmail((String)row.get("email"));
             client.setAddress((String)row.get("address"));
             client.setPhone((String)row.get("phone"));
-            client.setDeposit((long)row.get("deposit"));
+            client.setDeposit((int)row.get("deposit"));
             clients.add(client);
         });
 

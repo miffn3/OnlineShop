@@ -34,7 +34,7 @@ public class AdministratorServiceTest {
                 "Petrovich","petr1","petrpass","lead");
 
 
-        underTest.registry(administrator);
+        underTest.registration(administrator);
         verify(administratorRepository).addAdministrator(captor.capture());
         Administrator value = captor.getValue();
         assertEquals(administrator,value);

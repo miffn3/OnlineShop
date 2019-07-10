@@ -19,11 +19,11 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
     }
 
     @Override
-    public void addAdministrator(Administrator administrator) {
+    public int addAdministrator(Administrator administrator) {
         if (administrator == null) {
             throw new IllegalArgumentException();
         }
-        jdbcTemplate.update("INSERT INTO administrator " +
+        return jdbcTemplate.update("INSERT INTO administrator " +
                 "(firstName, lastName, patronymic, login, password, position) VALUES (?,?,?,?,?,?)",
                 administrator.getFirstName(),
                 administrator.getLastName(),
@@ -41,12 +41,23 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
 
     @Override
     public void deleteAdministrator(int id) {
-
+        jdbcTemplate.update("DELETE FROM administrator WHERE id=?", id);
     }
 
     @Override
     public void updateAdministrator(Administrator administrator) {
-
+        if (administrator == null) {
+            throw new IllegalArgumentException();
+        }
+        jdbcTemplate.update("UPDATE administrator SET" +
+                        "firstName = ?, lastName = ?, patronymic = ?, login = ?, password = ?, position = ? WHERE id = ?",
+                administrator.getFirstName(),
+                administrator.getLastName(),
+                administrator.getPatronymic(),
+                administrator.getLogin(),
+                administrator.getLastName(),
+                administrator.getPosition(),
+                administrator.getId());
     }
 
     @Override
@@ -55,7 +66,7 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM administrator");
         rows.forEach(row -> {
             Administrator administrator = new Administrator();
-            administrator.setId((long)row.get("id"));
+            administrator.setId((int)row.get("id"));
             administrator.setFirstName((String)row.get("firstName"));
             administrator.setLastName((String)row.get("lastName"));
             administrator.setPatronymic((String)row.get("patronymic"));

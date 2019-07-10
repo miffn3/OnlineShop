@@ -1,24 +1,21 @@
-package net.thumbtack.onlineshop.entity;
+package net.thumbtack.onlineshop.dto.response;
 
-public abstract class User {
-
+public class AdministratorResponseDto {
     private int id;
     private String firstName;
     private String lastName;
     private String patronymic;
-    private String login;
-    private String password;
+    private String position;
 
-    public User() {
-    }
-
-    public User(int id, String firstName, String lastName, String patronymic, String login, String password) {
+    public AdministratorResponseDto(int id, String firstName, String lastName, String patronymic, String position) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
-        this.login = login;
-        this.password = password;
+        this.position = position;
+    }
+
+    public AdministratorResponseDto() {
     }
 
     public int getId() {
@@ -53,20 +50,11 @@ public abstract class User {
         this.patronymic = patronymic;
     }
 
-    public String getLogin() {
-        return login;
+    public String getPosition() {
+        return position;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setPosition(String position) {
+        this.position = position;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 }
