@@ -20,21 +20,19 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public void addSession(Session session) {
-        jdbcTemplate.update("UPDATE user SET " +
-                "cookie=? WHERE login=?",
-                session.getCookie(),
-                session.getLogin());
+        jdbcTemplate.update("INSERT INTO session SET userId=?,cookie=?",
+                session.getUserId(),
+                session.getCookie());
     }
 
     @Override
     public List<Session> findAll() {
         List<Session> sessions = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT login, cookie, role FROM user");
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT userId, cookie FROM session");
         rows.forEach(row -> {
             Session session = new Session();
-            session.setLogin((String)row.get("login"));
+            session.setUserId((int)row.get("userId"));
             session.setCookie((String)row.get("cookie"));
-            session.setRole((String)row.get("role"));
             sessions.add(session);
         });
 
@@ -43,7 +41,7 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public void deleteSession(String cookie) {
-        jdbcTemplate.update("DELETE cookie FROM user WHERE cookie=?",
+        jdbcTemplate.update("DELETE userId, cookie FROM session WHERE cookie=?",
                 cookie);
     }
 }

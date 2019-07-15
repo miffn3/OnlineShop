@@ -1,5 +1,7 @@
 package net.thumbtack.onlineshop.entity;
 
+import java.util.List;
+
 public class Client extends User {
 
     private String email;
@@ -10,9 +12,8 @@ public class Client extends User {
     public Client() {
     }
 
-    public Client(int id, String firstName, String lastName, String patronymic, String login,
-                  String password, String email, String address, String phone, int deposit) {
-        super(id, firstName, lastName, patronymic, login, password);
+    public Client(int id, String firstName, String lastName, String patronymic, String login, String password, String role, String email, String address, String phone, int deposit) {
+        super(id, firstName, lastName, patronymic, login, password, role);
         this.email = email;
         this.address = address;
         this.phone = phone;

@@ -21,28 +21,28 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class ClientServiceTest {
-    private ClientService underTest;
-
-    @Mock
-    private ClientRepository clientRepository;
-
-    @Captor
-    public ArgumentCaptor<Client> captor;
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        underTest = new ClientServiceImpl(clientRepository);
-    }
-    @Test
-    public void getAllClients() {
-        List<Client> clients = Arrays.asList(
-                new Client(1, "Ivan", "Ivanov", "Ivanovich","Ivan98" ,"pass999","ivan98@mail.ru", "Ivanovo", "999", 555),
-                new Client(2, "Petr", "Petrov", "Petrovich","Petr88" ,"pass999","petr88@mail.ru", "Petrovo", "999", 555));
-        when(clientRepository.getAllClients()).thenReturn(clients);
-
-        List<Client> allClients = underTest.getAllClients();
-        assertThat(allClients, hasSize(2));
-        assertThat(allClients, allOf(hasItem(clients.get(0)), hasItem(clients.get(1))));
-    }
+//    private ClientService underTest;
+//
+//    @Mock
+//    private ClientRepository clientRepository;
+//
+//    @Captor
+//    public ArgumentCaptor<Client> captor;
+//
+//    @Before
+//    public void setUp() {
+//        MockitoAnnotations.initMocks(this);
+//        underTest = new ClientServiceImpl(clientRepository);
+//    }
+//    @Test
+//    public void getAllClients() {
+//        List<Client> clients = Arrays.asList(
+//                new Client(1, "Ivan", "Ivanov", "Ivanovich","Ivan98" ,"pass999","ivan98@mail.ru", "Ivanovo", "999", 555),
+//                new Client(2, "Petr", "Petrov", "Petrovich","Petr88" ,"pass999","petr88@mail.ru", "Petrovo", "999", 555));
+//        when(clientRepository.getAllClients()).thenReturn(clients);
+//
+//        List<Client> allClients = underTest.getAllClients();
+//        assertThat(allClients, hasSize(2));
+//        assertThat(allClients, allOf(hasItem(clients.get(0)), hasItem(clients.get(1))));
+//    }
 }

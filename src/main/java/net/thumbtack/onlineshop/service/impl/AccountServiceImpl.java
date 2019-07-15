@@ -1,8 +1,6 @@
 package net.thumbtack.onlineshop.service.impl;
 
 import net.thumbtack.onlineshop.entity.Administrator;
-import net.thumbtack.onlineshop.entity.Client;
-import net.thumbtack.onlineshop.entity.Session;
 import net.thumbtack.onlineshop.service.iface.AccountService;
 import net.thumbtack.onlineshop.service.iface.AdministratorService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
@@ -17,13 +15,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Administrator getAdmin(String cookie) {
-        Session session = sessionService.validateCookie(cookie);
-        return administratorService.getAdminByLogin(session.getLogin());
-    }
-
-    @Override
-    public Client getClient(String cookie) {
-        return null;
+    public Administrator getAdminById(int id) {
+        return administratorService.getAdminById(id);
     }
 }

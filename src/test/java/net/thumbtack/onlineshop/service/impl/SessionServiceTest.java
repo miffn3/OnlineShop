@@ -23,33 +23,33 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class SessionServiceTest {
-    private SessionService underTest;
-
-    @Mock
-    private SessionRepository sessionRepository;
-
-    @Mock
-    private AdministratorService administratorService;
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        underTest = new SessionServiceImpl(sessionRepository, administratorService);
-    }
-
-    @Test
-    public void getSession() {
-        Administrator administrator = new Administrator(1,"Petr","Petrov",
-                "Petrovich","petr1","petrpass","lead");
-
-        List<Session> sessions = Arrays.asList(
-                new Session("petr1", "cookie","admin"));
-
-        when(sessionRepository.findAll()).thenReturn(sessions);
-
-        Session sessionTest = underTest.getSession(administrator.getLogin());
-        assertEquals(sessions.get(0), sessionTest);
-    }
+//    private SessionService underTest;
+//
+//    @Mock
+//    private SessionRepository sessionRepository;
+//
+//    @Mock
+//    private AdministratorService administratorService;
+//
+//    @Before
+//    public void setUp() {
+//        MockitoAnnotations.initMocks(this);
+//        underTest = new SessionServiceImpl(sessionRepository, administratorService);
+//    }
+//
+//    @Test
+//    public void getSession() {
+//        Administrator administrator = new Administrator(1,"Petr","Petrov",
+//                "Petrovich","petr1","petrpass","lead");
+//
+//        List<Session> sessions = Arrays.asList(
+//                new Session("petr1", "cookie","admin"));
+//
+//        when(sessionRepository.findAll()).thenReturn(sessions);
+//
+//        Session sessionTest = underTest.getSession(administrator.getLogin());
+//        assertEquals(sessions.get(0), sessionTest);
+//    }
 
     @Test
     public void logOut() {

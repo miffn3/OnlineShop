@@ -1,5 +1,7 @@
 package net.thumbtack.onlineshop.entity;
 
+import java.util.List;
+
 public class Administrator extends User {
 
     private String position;
@@ -7,9 +9,8 @@ public class Administrator extends User {
     public Administrator() {
     }
 
-    public Administrator(int id, String firstName, String lastName, String patronymic, String login,
-                         String password, String position) {
-        super(id, firstName, lastName, patronymic, login, password);
+    public Administrator(int id, String firstName, String lastName, String patronymic, String login, String password,  String role, String position) {
+        super(id, firstName, lastName, patronymic, login, password, role);
         this.position = position;
     }
 

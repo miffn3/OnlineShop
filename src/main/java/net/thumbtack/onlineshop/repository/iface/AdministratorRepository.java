@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface AdministratorRepository {
 
-    int addAdministrator(Administrator administrator);
+    void addAdministrator(Administrator administrator);
     Administrator getAdminById(int id);
     void deleteAdministrator(int id);
     void updateAdministrator(Administrator administrator);

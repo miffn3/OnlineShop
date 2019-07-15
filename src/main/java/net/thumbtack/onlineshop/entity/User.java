@@ -1,5 +1,7 @@
 package net.thumbtack.onlineshop.entity;
 
+import java.util.List;
+
 public abstract class User {
 
     private int id;
@@ -8,17 +10,19 @@ public abstract class User {
     private String patronymic;
     private String login;
     private String password;
+    private String role;
 
     public User() {
     }
 
-    public User(int id, String firstName, String lastName, String patronymic, String login, String password) {
+    public User(int id, String firstName, String lastName, String patronymic, String login, String password, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
         this.login = login;
         this.password = password;
+        this.role = role;
     }
 
     public int getId() {
@@ -69,4 +73,11 @@ public abstract class User {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

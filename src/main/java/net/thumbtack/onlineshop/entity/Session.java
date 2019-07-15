@@ -1,30 +1,15 @@
 package net.thumbtack.onlineshop.entity;
 
 public class Session {
-    private String login;
+    private int userId;
     private String cookie;
-    private String role;
 
     public Session() {
     }
 
-    public Session(String login, String cookie, String role) {
-        this.login = login;
+    public Session(int userId, String cookie) {
+        this.userId = userId;
         this.cookie = cookie;
-        this.role = role;
-    }
-
-    public Session(String login, String cookie) {
-        this.login = login;
-        this.cookie = cookie;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getCookie() {
@@ -35,11 +20,11 @@ public class Session {
         this.cookie = cookie;
     }
 
-    public String getRole() {
-        return role;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

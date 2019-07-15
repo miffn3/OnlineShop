@@ -10,9 +10,8 @@ public class SessionMapper implements RowMapper<Session> {
     @Override
     public Session mapRow(ResultSet resultSet, int i) throws SQLException {
         Session session = new Session();
-        session.setLogin(resultSet.getString("login"));
+        session.setUserId(resultSet.getInt("userId"));
         session.setCookie(resultSet.getString("cookie"));
-        session.setRole(resultSet.getString("role"));
         return session;
     }
 }

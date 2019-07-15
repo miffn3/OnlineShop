@@ -24,34 +24,34 @@ import static org.mockito.Mockito.when;
 
 
 public class AccountServiceTest {
-    private AccountService underTest;
-
-    @Mock
-    private AdministratorService administratorService;
-
-    @Mock
-    private SessionService sessionService;
-
-    @Captor
-    public ArgumentCaptor<String> captor;
-
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        underTest = new AccountServiceImpl(administratorService, sessionService);
-    }
-
-    @Test
-    public void getAdmin() {
-        Session session = new Session("petr1", "cookie", "admin");
-
-        Administrator administrator = new Administrator(1,"Petr","Petrov",
-                "Petrovich","petr1","petrpass","lead");
-
-        when(sessionService.validateCookie("cookie")).thenReturn(session);
-        when(administratorService.getAdminByLogin("petr1")).thenReturn(administrator);
-
-        Administrator administrator1 = underTest.getAdmin(session.getCookie());
-        assertEquals(administrator1,administrator);
-    }
+//    private AccountService underTest;
+//
+//    @Mock
+//    private AdministratorService administratorService;
+//
+//    @Mock
+//    private SessionService sessionService;
+//
+//    @Captor
+//    public ArgumentCaptor<String> captor;
+//
+//    @Before
+//    public void setUp() {
+//        MockitoAnnotations.initMocks(this);
+//        underTest = new AccountServiceImpl(administratorService, sessionService);
+//    }
+//
+//    @Test
+//    public void getAdmin() {
+//        Session session = new Session("petr1", "cookie", "admin");
+//
+//        Administrator administrator = new Administrator(1,"Petr","Petrov",
+//                "Petrovich","petr1","petrpass","lead");
+//
+//        when(sessionService.validateCookie("cookie")).thenReturn(session);
+//        when(administratorService.getAdminByLogin("petr1")).thenReturn(administrator);
+//
+//        Administrator administrator1 = underTest.getAdmin(session.getCookie());
+//        assertEquals(administrator1,administrator);
+//    }
 }
