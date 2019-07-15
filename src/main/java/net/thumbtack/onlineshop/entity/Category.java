@@ -2,19 +2,26 @@ package net.thumbtack.onlineshop.entity;
 
 public class Category {
 
-    private long id;
+    private int id;
     private String name;
-    private Long parentId;
+    private Integer parentId;
     private String parentName;
 
     public Category() {
     }
 
-    public long getId() {
+    public Category(int id, String name, Integer parentId, String parentName) {
+        this.id = id;
+        this.name = name;
+        this.parentId = parentId;
+        this.parentName = parentName;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -26,11 +33,11 @@ public class Category {
         this.name = name;
     }
 
-    public long getParentId() {
+    public int getParentId() {
         return parentId;
     }
 
-    public void setParentId(long parentId) {
+    public void setParentId(int parentId) {
         this.parentId = parentId;
     }
 

@@ -23,25 +23,26 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
         if (administrator == null) {
             throw new IllegalArgumentException();
         }
-        return jdbcTemplate.update("INSERT INTO administrator " +
-                "(firstName, lastName, patronymic, login, password, position) VALUES (?,?,?,?,?,?)",
+        return jdbcTemplate.update("INSERT INTO user " +
+                "(firstName, lastName, patronymic, login, password, position,role) VALUES (?,?,?,?,?,?,?)",
                 administrator.getFirstName(),
                 administrator.getLastName(),
                 administrator.getPatronymic(),
                 administrator.getLogin(),
                 administrator.getLastName(),
-                administrator.getPosition());
+                administrator.getPosition(),
+                "admin");
     }
 
     @Override
     public Administrator getAdminById(int id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM administrator WHERE id = ?",
+        return jdbcTemplate.queryForObject("SELECT id, firstName, lastName, patronymic, login, password, position FROM user WHERE id = ? AND role='admin'",
                 new Object[]{id}, administratorMapper);
     }
 
     @Override
     public void deleteAdministrator(int id) {
-        jdbcTemplate.update("DELETE FROM administrator WHERE id=?", id);
+        jdbcTemplate.update("DELETE FROM user WHERE id=? AND role='admin'", id);
     }
 
     @Override
@@ -49,8 +50,8 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
         if (administrator == null) {
             throw new IllegalArgumentException();
         }
-        jdbcTemplate.update("UPDATE administrator SET" +
-                        "firstName = ?, lastName = ?, patronymic = ?, login = ?, password = ?, position = ? WHERE id = ?",
+        jdbcTemplate.update("UPDATE user SET" +
+                        "firstName = ?, lastName = ?, patronymic = ?, login = ?, password = ?, position = ? WHERE id = ? AND role='admin'",
                 administrator.getFirstName(),
                 administrator.getLastName(),
                 administrator.getPatronymic(),
@@ -63,7 +64,7 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
     @Override
     public List<Administrator> getAllAdmins() {
         List<Administrator> administrators = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM administrator");
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT id, firstName, lastName, patronymic, login, password, position FROM user WHERE role='admin'");
         rows.forEach(row -> {
             Administrator administrator = new Administrator();
             administrator.setId((int)row.get("id"));
@@ -78,4 +79,5 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
 
         return administrators;
     }
+
 }

@@ -23,7 +23,7 @@ public class ClientRepositoryImpl implements ClientRepository {
         if (client == null) {
             throw new IllegalArgumentException();
         }
-        jdbcTemplate.update("INSERT INTO administrator " +
+        jdbcTemplate.update("INSERT INTO user " +
                         "(firstName, lastName, patronymic, login, password, email, address, phone, deposit) " +
                         "VALUES (?,?,?,?,?,?,?,?,?)",
                 client.getFirstName(),
@@ -39,13 +39,13 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public Client getClientById(int id){
-        return jdbcTemplate.queryForObject("SELECT * FROM client WHERE id = ?",
+        return jdbcTemplate.queryForObject("SELECT firstName, lastName, patronymic, login, password, email, address, phone, deposit FROM user WHERE id = ?",
                 new Object[]{id}, clientMapper);
     }
 
     @Override
     public void deleteClient(int id){
-        jdbcTemplate.update("DELETE FROM client WHERE id=?", id);
+        jdbcTemplate.update("DELETE FROM user WHERE id=?", id);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public List<Client> getAllClients() {
         List<Client> clients = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM client");
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT firstName, lastName, patronymic, login, password, email, address, phone, deposit FROM user");
         rows.forEach(row -> {
             Client client = new Client();
             client.setId((int)row.get("id"));

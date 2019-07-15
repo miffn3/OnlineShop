@@ -4,20 +4,28 @@ import java.util.List;
 
 public class Product {
 
-    private long id;
+    private int id;
     private String name;
-    private long price;
-    private long count;
+    private int price;
+    private int count;
     private List<Category> categories;
 
     public Product() {
     }
 
-    public long getId() {
+    public Product(int id, String name, int price, int count, List<Category> categories) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.count = count;
+        this.categories = categories;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -29,19 +37,19 @@ public class Product {
         this.name = name;
     }
 
-    public long getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public long getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(long count) {
+    public void setCount(int count) {
         this.count = count;
     }
 

@@ -1,32 +1,24 @@
-CREATE TABLE administrator (
+CREATE TABLE user (
   id INT(11) NOT NULL AUTO_INCREMENT,
-  firstName VARCHAR(50) NOT NULL,
-  lastName VARCHAR(50) NOT NULL,
+  firstName VARCHAR(50),
+  lastName VARCHAR(50),
   patronymic VARCHAR(50),
-  login VARCHAR(50) NOT NULL,
-  password VARCHAR(50) NOT NULL,
-  position VARCHAR(50) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
-CREATE TABLE client (
-  id INT(11) NOT NULL AUTO_INCREMENT,
-  firstName VARCHAR(50) NOT NULL,
-  lastName VARCHAR(50) NOT NULL,
-  patronymic VARCHAR(50),
-  login VARCHAR(50) NOT NULL,
-  password VARCHAR(50) NOT NULL,
-  email VARCHAR(50) NOT NULL,
-  address VARCHAR(50) NOT NULL,
-  phone VARCHAR(50) NOT NULL,
-  deposit INT(11) NOT NULL,
+  login VARCHAR(50),
+  password VARCHAR(50),
+  position VARCHAR(50),
+  email VARCHAR(50),
+  address VARCHAR(50),
+  phone VARCHAR(50),
+  deposit INT(11),
+  cookie VARCHAR(50),
+  role VARCHAR (50),
   PRIMARY KEY (id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 CREATE TABLE cart (
   id INT(11) NOT NULL AUTO_INCREMENT,
   clientId INT(11) NOT NULL,
-  FOREIGN KEY (clientId) REFERENCES client(id),
+  FOREIGN KEY (clientId) REFERENCES user(id),
   PRIMARY KEY (id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
@@ -43,6 +35,7 @@ CREATE TABLE category (
   name VARCHAR(50) NOT NULL,
   parentId INT(11),
   parentName VARCHAR(50) NOT NULL,
+  FOREIGN KEY (parentId) REFERENCES category(id),
   PRIMARY KEY (id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 

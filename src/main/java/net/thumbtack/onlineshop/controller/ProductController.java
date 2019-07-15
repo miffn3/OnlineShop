@@ -18,33 +18,37 @@ public class ProductController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Product> addProduct() {
-        //todo
-        return new ResponseEntity<Product>(HttpStatus.OK);
+    public ResponseEntity<Product> addProduct(@CookieValue("JAVASESSIONID") String cookie, @RequestBody Product product) {
+        this.productService.addProduct(product);
+        return new ResponseEntity<>(product,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable int id) {
+    public ResponseEntity<Product> getProduct(@CookieValue("JAVASESSIONID") String cookie, @PathVariable int id) {
         Product product = this.productService.getProduct(id);
-        return new ResponseEntity<Product>(product, HttpStatus.OK);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> editProduct(@PathVariable int id) {
-        //todo
-        Product product = this.productService.getProduct(id);
-        return new ResponseEntity<Product>(product, HttpStatus.OK);
+    public ResponseEntity<Product> editProduct(@CookieValue("JAVASESSIONID") String cookie, @PathVariable int id,
+                                               @RequestBody Product product) {
+        Product productEdit = this.productService.getProduct(id);
+        productEdit.setCategories(product.getCategories());
+        productEdit.setName(product.getName());
+        productEdit.setCount(product.getCount());
+        productEdit.setPrice(product.getPrice());
+        this.productService.updateProduct(productEdit);
+        return new ResponseEntity<>(productEdit, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable int id) {
+    public void deleteProduct(@CookieValue("JAVASESSIONID") String cookie,@PathVariable int id) {
         this.productService.deleteProduct(id);
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<Product>> getAllProducts(@CookieValue("JAVASESSIONID") String cookie) {
         List<Product> allProducts = this.productService.getAllProducts();
-
         return new ResponseEntity<>(allProducts, HttpStatus.OK);
     }
 }

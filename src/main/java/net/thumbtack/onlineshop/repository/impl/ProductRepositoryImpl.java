@@ -32,7 +32,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Product getProductById(int id){
-        return jdbcTemplate.queryForObject("SELECT * FROM product WHERE id=?", new Object[]{id}, productMapper);
+        return jdbcTemplate.queryForObject("SELECT product.id AS id, product.name AS name, price, count, " +
+                "category.id AS category_Id, category.name AS categoryName, parentId, parentName " +
+                "FROM product JOIN product_category ON productId=product.id JOIN category ON category.id=categoryId " +
+                "WHERE product.id=?", new Object[]{id}, productMapper);
     }
 
     @Override
@@ -51,10 +54,10 @@ public class ProductRepositoryImpl implements ProductRepository {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM product");
         rows.forEach(row -> {
             Product product = new Product();
-            product.setId((long)row.get("id"));
+            product.setId((int)row.get("id"));
             product.setName((String)row.get("name"));
-            product.setPrice((long)row.get("price"));
-            product.setCount((long)row.get("count"));
+            product.setPrice((int)row.get("price"));
+            product.setCount((int)row.get("count"));
             products.add(product);
         });
 
