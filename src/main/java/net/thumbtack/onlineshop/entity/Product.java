@@ -1,5 +1,6 @@
 package net.thumbtack.onlineshop.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Product {
@@ -59,6 +60,15 @@ public class Product {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public void addCategory(Category category) {
+        if(categories == null) {
+            setCategories(new ArrayList<>());
+        }
+        List<Category> categoryList = getCategories();
+        categoryList.add(category);
+        setCategories(categoryList);
     }
 
     @Override

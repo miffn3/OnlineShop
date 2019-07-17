@@ -1,6 +1,5 @@
 package net.thumbtack.onlineshop.controller;
 
-import net.thumbtack.onlineshop.dto.response.ClientResponseDto;
 import net.thumbtack.onlineshop.entity.Client;
 import net.thumbtack.onlineshop.service.iface.ClientService;
 import org.springframework.http.HttpStatus;
@@ -23,14 +22,15 @@ public class ClientController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<ClientResponseDto>> getAllClients(@CookieValue("JAVASESSIONID") String cookie) {
+    public ResponseEntity<List<Client>> getAllClients(@CookieValue("JAVASESSIONID") String cookie) {
         List<Client> clients = this.clientService.getAllClients();
-        List<ClientResponseDto> allClients = new ArrayList<>();
+        List<Client> allClients = new ArrayList<>();
         for (Client client:clients) {
-            ClientResponseDto clientResponseDto = new ClientResponseDto(
-                    client.getId(), client.getFirstName(), client.getLastName(), client.getPatronymic(),
-                    client.getEmail(), client.getAddress(), client.getPhone(), "client");
-            allClients.add(clientResponseDto);
+            client.setDeposit(null);
+            client.setLogin(null);
+            client.setPassword(null);
+            client.setRole(null);
+            allClients.add(client);
         }
         return new ResponseEntity<>(allClients, HttpStatus.OK);
     }

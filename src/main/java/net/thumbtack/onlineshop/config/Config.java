@@ -63,8 +63,8 @@ public class Config {
     }
 
     @Bean
-    public ProductRepository productRepository(JdbcTemplate jdbcTemplate, ProductMapper productMapper) {
-        return new ProductRepositoryImpl(jdbcTemplate, productMapper);
+    public ProductRepository productRepository(JdbcTemplate jdbcTemplate, ProductMapper productMapper, CategoryMapper categoryMapper) {
+        return new ProductRepositoryImpl(jdbcTemplate, productMapper, categoryMapper);
     }
 
     @Bean

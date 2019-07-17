@@ -18,14 +18,6 @@ public class ProductMapper implements RowMapper<Product> {
             product.setName(resultSet.getString("name"));
             product.setPrice(resultSet.getInt("price"));
             product.setCount(resultSet.getInt("count"));
-            Category category = new Category();
-            category.setId(resultSet.getInt("category_Id"));
-            category.setName(resultSet.getString("categoryName"));
-            category.setParentId(resultSet.getInt("parentId"));
-            category.setParentName(resultSet.getString("parentName"));
-            List<Category> categories = product.getCategories();
-            categories.add(category);
-            product.setCategories(categories);
         }
         return product;
     }

@@ -2,7 +2,7 @@ package net.thumbtack.onlineshop.controller;
 
 import net.thumbtack.onlineshop.entity.Product;
 import net.thumbtack.onlineshop.entity.Session;
-import net.thumbtack.onlineshop.exception.ServerException;
+import net.thumbtack.onlineshop.exception.OnlineShopException;
 import net.thumbtack.onlineshop.service.iface.ProductService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpStatus;
@@ -23,8 +23,8 @@ public class ProductController {
     }
 
     @PostMapping("/")
-    public ResponseEntity addProduct(
-            @CookieValue("JAVASESSIONID") String cookie,
+    public ResponseEntity<Product> addProduct(
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @RequestBody Product product) {
 
         productService.addProduct(product);
@@ -32,8 +32,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getProduct(
-            @CookieValue("JAVASESSIONID") String cookie,
+    public ResponseEntity<Product> getProduct(
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable int id) {
 
         Product product = this.productService.getProduct(id);
@@ -41,17 +41,16 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity editProduct(
-            @CookieValue("JAVASESSIONID") String cookie,
+    public ResponseEntity<Product> editProduct(
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable int id,
             @RequestBody Product product) {
 
         Session session;
         try {
             session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
 
         Product productEdit = productService.getProduct(id);
@@ -65,14 +64,14 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteProduct(
-            @CookieValue("JAVASESSIONID") String cookie,
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable int id) {
+
         Session session;
         try {
             session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
 
         productService.deleteProduct(id);
@@ -80,16 +79,16 @@ public class ProductController {
     }
 
     @GetMapping("/")
-    public ResponseEntity getAllProducts(
-            @CookieValue("JAVASESSIONID") String cookie) {
+    public ResponseEntity<List<Product>> getAllProducts(
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
         
         Session session;
         try {
             session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
+
         List<Product> allProducts = this.productService.getAllProducts();
         return new ResponseEntity<>(allProducts, HttpStatus.OK);
     }
