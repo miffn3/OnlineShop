@@ -1,6 +1,6 @@
 package net.thumbtack.onlineshop.controller;
 
-import net.thumbtack.onlineshop.dto.response.AdministratorResponseDto;
+
 import net.thumbtack.onlineshop.entity.Administrator;
 import net.thumbtack.onlineshop.entity.Session;
 import net.thumbtack.onlineshop.service.iface.AccountService;

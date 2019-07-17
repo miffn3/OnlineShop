@@ -1,9 +1,9 @@
 package net.thumbtack.onlineshop.controller;
 
-import net.thumbtack.onlineshop.dto.response.AdministratorResponseDto;
 import net.thumbtack.onlineshop.entity.Administrator;
 import net.thumbtack.onlineshop.entity.Session;
-import net.thumbtack.onlineshop.exception.ServerException;
+import net.thumbtack.onlineshop.entity.User;
+import net.thumbtack.onlineshop.exception.OnlineShopException;
 import net.thumbtack.onlineshop.service.iface.AccountService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.ResponseEntity;
@@ -24,24 +24,23 @@ public class AccountsController {
     }
 
     @GetMapping("/")
-    public ResponseEntity getCurrentUser(
+    public ResponseEntity<User> getCurrentUser(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
 
         Session session;
         try {
             session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
 
         Administrator administrator = accountService.getAdminById(session.getUserId());
+        administrator.setRole(null);
+        administrator.setPassword(null);
+        administrator.setLogin(null);
 
-        AdministratorResponseDto administratorResponseDto = new AdministratorResponseDto(
-                administrator.getId(), administrator.getFirstName(), administrator.getLastName(),
-                        administrator.getPatronymic(), administrator.getPosition());
         return ResponseEntity
                 .ok()
-                .body(administratorResponseDto);
+                .body(administrator);
     }
 }

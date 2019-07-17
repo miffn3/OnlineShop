@@ -1,10 +1,11 @@
 package net.thumbtack.onlineshop.controller;
 
 import net.thumbtack.onlineshop.dto.request.AdministratorUpdateRequestDto;
-import net.thumbtack.onlineshop.dto.response.AdministratorResponseDto;
 import net.thumbtack.onlineshop.entity.Administrator;
 import net.thumbtack.onlineshop.entity.Session;
-import net.thumbtack.onlineshop.exception.ServerException;
+import net.thumbtack.onlineshop.entity.User;
+import net.thumbtack.onlineshop.exception.LoginDuplicateException;
+import net.thumbtack.onlineshop.exception.OnlineShopException;
 import net.thumbtack.onlineshop.service.iface.AdministratorService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpCookie;
@@ -13,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/admins")
@@ -28,27 +27,27 @@ public class AdministratorController {
     }
 
     @PostMapping("/")
-    public ResponseEntity registrationAdmin(
+    public ResponseEntity<User> registrationAdmin(
             @RequestBody Administrator administrator) {
 
         try {
-            this.administratorService.registration(administrator);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+            if(!administratorService.registration(administrator)) {
+                throw new LoginDuplicateException(administrator.getLogin());
+            }
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
-
-        AdministratorResponseDto administratorResponseDto =
-                new AdministratorResponseDto(1, administrator.getFirstName(),
-                        administrator.getLastName(), administrator.getPatronymic(), administrator.getPosition());
 
         Session session;
         try {
             session = sessionService.logIn(administrator.getLogin(), administrator.getPassword());
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
+
+        Administrator administratorResponse = new Administrator(session.getUserId(), administrator.getFirstName(),
+                administrator.getLastName(), administrator.getPatronymic(),
+                null , null, null,  administrator.getPosition());
 
         HttpCookie cookie = ResponseCookie.from("JAVASESSIONID", session.getCookie())
                 .path("**/api/**")
@@ -56,42 +55,33 @@ public class AdministratorController {
                 .build();
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(administratorResponseDto);
+                .body(administratorResponse);
     }
 
     @PutMapping("/")
-    public ResponseEntity editAdmin(
+    public ResponseEntity<User> editAdmin(
             @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
             @RequestBody AdministratorUpdateRequestDto updateRequestDto) {
 
         Session session;
         try {
              session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
+        } catch (OnlineShopException ex) {
+            System.out.println(ex.getOnlineShopErrorCode());
             return null;
         }
 
         try {
             this.administratorService.editAdmin(updateRequestDto, session.getUserId());
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
 
+        Administrator administratorResponse = new Administrator(session.getUserId(), updateRequestDto.getFirstName(),
+                updateRequestDto.getLastName(), updateRequestDto.getPatronymic(),
+                null , null, null,  updateRequestDto.getPosition());
 
-        AdministratorResponseDto administratorResponseDto =
-                new AdministratorResponseDto(session.getUserId(), updateRequestDto.getFirstName(), updateRequestDto.getLastName(),
-                        updateRequestDto.getPatronymic(), updateRequestDto.getPosition());
-        return new ResponseEntity<>(administratorResponseDto, HttpStatus.OK);
-    }
-
-    //Этого метода в условии нет, просто как пример для себя сделал, потом уберу
-    @GetMapping("/")
-    public ResponseEntity<List<Administrator>> getAllAdmins(
-            @CookieValue("JAVASESSIONID") String cookie) {
-        List<Administrator> allAdministrators = this.administratorService.getAllAdministrators();
-        return new ResponseEntity<>(allAdministrators, HttpStatus.OK);
+        return new ResponseEntity<>(administratorResponse, HttpStatus.OK);
     }
 
 }

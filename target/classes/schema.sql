@@ -10,9 +10,14 @@ CREATE TABLE user (
   address VARCHAR(50),
   phone VARCHAR(50),
   deposit INT(11),
-  cookie VARCHAR(50),
   role VARCHAR (50),
   PRIMARY KEY (id)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+CREATE TABLE session (
+  userId INT(11) NOT NULL,
+  cookie VARCHAR(50),
+  FOREIGN KEY (userId) REFERENCES user(id)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 CREATE TABLE cart (

@@ -7,12 +7,12 @@ public class Client extends User {
     private String email;
     private String address;
     private String phone;
-    private int deposit;
+    private Integer deposit;
 
     public Client() {
     }
 
-    public Client(int id, String firstName, String lastName, String patronymic, String login, String password, String role, String email, String address, String phone, int deposit) {
+    public Client(Integer id, String firstName, String lastName, String patronymic, String login, String password, String role, String email, String address, String phone, Integer deposit) {
         super(id, firstName, lastName, patronymic, login, password, role);
         this.email = email;
         this.address = address;
@@ -44,11 +44,11 @@ public class Client extends User {
         this.phone = phone;
     }
 
-    public int getDeposit() {
+    public Integer getDeposit() {
         return deposit;
     }
 
-    public void setDeposit(int deposit) {
+    public void setDeposit(Integer deposit) {
         this.deposit = deposit;
     }
 

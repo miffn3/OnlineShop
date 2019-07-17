@@ -4,7 +4,7 @@ import net.thumbtack.onlineshop.dto.request.CategoryCreateRequestDto;
 import net.thumbtack.onlineshop.dto.request.EditCategoryRequestDto;
 import net.thumbtack.onlineshop.entity.Category;
 import net.thumbtack.onlineshop.entity.Session;
-import net.thumbtack.onlineshop.exception.ServerException;
+import net.thumbtack.onlineshop.exception.OnlineShopException;
 import net.thumbtack.onlineshop.service.iface.CategoryService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpStatus;
@@ -25,15 +25,15 @@ public class CategoriesController {
     }
 
     @PostMapping("/")
-    public ResponseEntity addCategory(
+    public ResponseEntity<Category> addCategory(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             CategoryCreateRequestDto categoryCreateRequestDto) {
 
         Session session;
         try {
             session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
+        } catch (OnlineShopException ex) {
+            System.out.println(ex.getOnlineShopErrorCode());
             return null;
         }
 
@@ -47,16 +47,15 @@ public class CategoriesController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getCategory(
+    public ResponseEntity<Category> getCategory(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable int id) {
 
         Session session;
         try {
             session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
 
         Category category = categoryService.getCategory(id);
@@ -64,7 +63,7 @@ public class CategoriesController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity editCategory(
+    public ResponseEntity<Category> editCategory(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable int id,
             @RequestBody EditCategoryRequestDto requestDto) {
@@ -72,9 +71,8 @@ public class CategoriesController {
         Session session;
         try {
             session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
 
         //TODO:Editing part
@@ -83,16 +81,15 @@ public class CategoriesController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteCategory(
+    public ResponseEntity<Category> deleteCategory(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable int id) {
 
         Session session;
         try {
             session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
 
         Category category = categoryService.getCategory(id);
@@ -101,15 +98,14 @@ public class CategoriesController {
     }
 
     @GetMapping("/")
-    public ResponseEntity getAllCategories(
+    public ResponseEntity<List<Category>> getAllCategories(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
 
         Session session;
         try {
             session = sessionService.getSession(cookie);
-        } catch (ServerException ex) {
-            System.out.println(ex.getServerErrorCode());
-            return null;
+        } catch (OnlineShopException ex) {
+            throw ex;
         }
 
         List<Category> allCategories = categoryService.getAllCategories();

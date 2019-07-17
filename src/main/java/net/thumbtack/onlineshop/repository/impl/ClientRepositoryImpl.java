@@ -68,7 +68,7 @@ public class ClientRepositoryImpl implements ClientRepository {
             client.setEmail((String)row.get("email"));
             client.setAddress((String)row.get("address"));
             client.setPhone((String)row.get("phone"));
-            client.setDeposit((int)row.get("deposit"));
+            client.setDeposit((Integer) row.get("deposit"));
             clients.add(client);
         });
 

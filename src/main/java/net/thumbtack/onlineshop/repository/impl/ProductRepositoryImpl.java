@@ -1,7 +1,9 @@
 package net.thumbtack.onlineshop.repository.impl;
 
 import net.thumbtack.onlineshop.entity.Product;
+import net.thumbtack.onlineshop.repository.extractor.ProductExtractor;
 import net.thumbtack.onlineshop.repository.iface.ProductRepository;
+import net.thumbtack.onlineshop.repository.mapper.CategoryMapper;
 import net.thumbtack.onlineshop.repository.mapper.ProductMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -12,10 +14,12 @@ import java.util.Map;
 public class ProductRepositoryImpl implements ProductRepository {
     private JdbcTemplate jdbcTemplate;
     private ProductMapper productMapper;
+    private CategoryMapper categoryMapper;
 
-    public ProductRepositoryImpl(JdbcTemplate jdbcTemplate, ProductMapper productMapper) {
+    public ProductRepositoryImpl(JdbcTemplate jdbcTemplate, ProductMapper productMapper, CategoryMapper categoryMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.productMapper = productMapper;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
@@ -32,10 +36,10 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Product getProductById(int id){
-        return jdbcTemplate.queryForObject("SELECT product.id AS id, product.name AS name, price, count, " +
+        return jdbcTemplate.query("SELECT product.id AS id, product.name AS name, price, count, " +
                 "category.id AS category_Id, category.name AS categoryName, parentId, parentName " +
                 "FROM product JOIN product_category ON productId=product.id JOIN category ON category.id=categoryId " +
-                "WHERE product.id=?", new Object[]{id}, productMapper);
+                "WHERE product.id=?", new ProductExtractor(productMapper,categoryMapper), id);
     }
 
     @Override
