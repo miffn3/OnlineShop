@@ -14,32 +14,32 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public int addCategory(Category category) {
-        return categoryRepository.addCategory(category);
+    public Category addCategory(Category category) {
+        return null;
     }
 
     @Override
-    public Category getCategory(int id){
-        return categoryRepository.getCategoryById(id);
+    public Category getCategory(Long id) {
+        return categoryRepository.findById(id).get();
     }
 
     @Override
-    public void updateCategory(Category category){
-        categoryRepository.updateCategory(category);
+    public void updateCategory(Category category) {
+
     }
 
     @Override
-    public void deleteCategory(int id) {
-        categoryRepository.deleteCategory(id);
+    public void deleteCategory(Long id) {
+
     }
 
     @Override
     public List<Category> getAllCategories() {
-        return categoryRepository.getAllCategories();
+        return null;
     }
 
     @Override
-    public List<Category> getAllProductCategoriesById(int id) {
-        return categoryRepository.getAllCategoriesById(id);
+    public List<Category> getAllProductCategoriesById(Long id) {
+        return null;
     }
 }

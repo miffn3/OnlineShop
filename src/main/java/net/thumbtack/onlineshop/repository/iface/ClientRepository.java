@@ -1,13 +1,9 @@
 package net.thumbtack.onlineshop.repository.iface;
 
 import net.thumbtack.onlineshop.entity.Client;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface ClientRepository {
-    int addClient(Client client);
-    Client getClientById(int id);
-    void deleteClient(int id);
-    void updateClient(Client client);
-    List<Client> getAllClients();
+public interface ClientRepository extends CrudRepository<Client, Long> {
 }

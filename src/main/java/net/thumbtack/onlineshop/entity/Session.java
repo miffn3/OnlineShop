@@ -1,30 +1,18 @@
 package net.thumbtack.onlineshop.entity;
 
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Data
+@Entity
 public class Session {
-    private int userId;
+
+    @Id
     private String cookie;
 
-    public Session() {
-    }
-
-    public Session(int userId, String cookie) {
-        this.userId = userId;
-        this.cookie = cookie;
-    }
-
-    public String getCookie() {
-        return cookie;
-    }
-
-    public void setCookie(String cookie) {
-        this.cookie = cookie;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+    @Column(name = "user_Id")
+    private Long userId;
 }
