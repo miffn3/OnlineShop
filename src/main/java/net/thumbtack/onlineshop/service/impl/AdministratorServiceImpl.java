@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.List;
 
 public class AdministratorServiceImpl implements AdministratorService {
+
     @Value("${min_password_length}")
     private int min_password_length;
 
@@ -23,15 +24,14 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public boolean registration(Administrator administrator) throws OnlineShopException {
+    public int registration(Administrator administrator) throws OnlineShopException {
         validate(administrator);
 
         if(isLoginExist(administrator.getLogin())) {
-            return false;
+            return -1;
         }
 
-        administratorRepository.addAdministrator(administrator);
-        return true;
+        return administratorRepository.addAdministrator(administrator);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         Administrator administrator = getAdminById(id);
 
         if(!isPasswordExist(administrator.getLogin(), updateRequestDto.getOldPassword())) {
-            throw new OnlineShopException(OnlineShopErrorCode.USER_WRONG_PASSWORD);
+            throw new PasswordAuthorizationException();
         }
 
         administrator.setFirstName(updateRequestDto.getFirstName());
@@ -74,7 +74,12 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public Administrator getAdminById(int id) {
-        return administratorRepository.getAdminById(id);
+        Administrator administrator = administratorRepository.getAdminById(id);
+        if (administrator != null) {
+            administrator.setLogin(null);
+            administrator.setPassword(null);
+        }
+        return administrator;
     }
 
     @Override

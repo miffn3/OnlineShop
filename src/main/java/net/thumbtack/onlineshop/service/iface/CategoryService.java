@@ -5,9 +5,10 @@ import net.thumbtack.onlineshop.entity.Category;
 import java.util.List;
 
 public interface CategoryService {
-    void addCategory(Category category);
+    int addCategory(Category category);
     Category getCategory(int id);
     void updateCategory(Category category);
     void deleteCategory(int id);
     List<Category> getAllCategories();
+    List<Category> getAllProductCategoriesById(int id);
 }

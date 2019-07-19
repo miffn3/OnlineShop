@@ -2,6 +2,7 @@ package net.thumbtack.onlineshop.service.impl;
 
 import net.thumbtack.onlineshop.entity.Product;
 import net.thumbtack.onlineshop.repository.iface.ProductRepository;
+import net.thumbtack.onlineshop.service.iface.CategoryService;
 import net.thumbtack.onlineshop.service.iface.ProductService;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +20,10 @@ public class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private CategoryService categoryService;
+
+
     @Captor
     public ArgumentCaptor<Product> captor;
 
@@ -28,7 +33,7 @@ public class ProductServiceTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        underTest = new ProductServiceImpl(productRepository);
+        underTest = new ProductServiceImpl(productRepository,categoryService);
     }
 
 

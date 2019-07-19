@@ -1,6 +1,7 @@
 package net.thumbtack.onlineshop.controller;
 
 import net.thumbtack.onlineshop.entity.Administrator;
+import net.thumbtack.onlineshop.entity.Client;
 import net.thumbtack.onlineshop.entity.Session;
 import net.thumbtack.onlineshop.entity.User;
 import net.thumbtack.onlineshop.exception.OnlineShopException;
@@ -34,13 +35,10 @@ public class AccountsController {
             throw ex;
         }
 
-        Administrator administrator = accountService.getAdminById(session.getUserId());
-        administrator.setRole(null);
-        administrator.setPassword(null);
-        administrator.setLogin(null);
+        User user = accountService.getCurrentUserById(session.getUserId());
 
         return ResponseEntity
                 .ok()
-                .body(administrator);
+                .body(user);
     }
 }

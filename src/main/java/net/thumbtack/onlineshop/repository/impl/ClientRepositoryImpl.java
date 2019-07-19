@@ -4,8 +4,10 @@ import net.thumbtack.onlineshop.entity.Client;
 import net.thumbtack.onlineshop.repository.iface.ClientRepository;
 import net.thumbtack.onlineshop.repository.mapper.ClientMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,22 +21,24 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public void addClient(Client client){
+    public int addClient(Client client){
         if (client == null) {
             throw new IllegalArgumentException();
         }
-        jdbcTemplate.update("INSERT INTO user " +
-                        "(firstName, lastName, patronymic, login, password, email, address, phone, deposit) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?)",
-                client.getFirstName(),
-                client.getLastName(),
-                client.getPatronymic(),
-                client.getLogin(),
-                client.getLastName(),
-                client.getEmail(),
-                client.getAddress(),
-                client.getPhone(),
-                client.getDeposit());
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        simpleJdbcInsert.withTableName("user").usingGeneratedKeyColumns("id");
+        Map<String, Object> parameters = new HashMap<>(3);
+        parameters.put("firstName", client.getFirstName());
+        parameters.put("lastName", client.getLastName());
+        parameters.put("patronymic", client.getPatronymic());
+        parameters.put("login", client.getLogin());
+        parameters.put("password", client.getPassword());
+        parameters.put("email", client.getEmail());
+        parameters.put("address", client.getAddress());
+        parameters.put("phone", client.getPhone());
+        parameters.put("deposit", client.getDeposit());
+        Number newId = simpleJdbcInsert.executeAndReturnKey(parameters);
+        return (int) newId;
     }
 
     @Override

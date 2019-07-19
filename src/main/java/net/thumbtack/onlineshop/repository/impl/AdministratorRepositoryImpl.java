@@ -4,8 +4,10 @@ import net.thumbtack.onlineshop.entity.Administrator;
 import net.thumbtack.onlineshop.repository.iface.AdministratorRepository;
 import net.thumbtack.onlineshop.repository.mapper.AdministratorMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,18 +21,21 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
     }
 
     @Override
-    public void addAdministrator(Administrator administrator) {
+    public int addAdministrator(Administrator administrator) {
         if (administrator == null) {
             throw new IllegalArgumentException();
         }
-       jdbcTemplate.update("INSERT INTO user " +
-                "(firstName, lastName, patronymic, login, password, position) VALUES (?,?,?,?,?,?)",
-                administrator.getFirstName(),
-                administrator.getLastName(),
-                administrator.getPatronymic(),
-                administrator.getLogin(),
-                administrator.getPassword(),
-                administrator.getPosition());
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        simpleJdbcInsert.withTableName("user").usingGeneratedKeyColumns("id");
+        Map<String, Object> parameters = new HashMap<>(1);
+        parameters.put("firstName", administrator.getFirstName());
+        parameters.put("lastName", administrator.getLastName());
+        parameters.put("patronymic", administrator.getPatronymic());
+        parameters.put("login", administrator.getLogin());
+        parameters.put("password", administrator.getPassword());
+        parameters.put("position", administrator.getPosition());
+        Number newId = simpleJdbcInsert.executeAndReturnKey(parameters);
+        return (int) newId;
     }
 
     @Override
@@ -63,7 +68,9 @@ public class AdministratorRepositoryImpl implements AdministratorRepository {
     @Override
     public List<Administrator> getAllAdmins() {
         List<Administrator> administrators = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT id, firstName, lastName, patronymic, login, password, position FROM user");
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(
+                "SELECT id, firstName, lastName, patronymic, login, password, position FROM user");
+
         rows.forEach(row -> {
             Administrator administrator = new Administrator();
             administrator.setId((int)row.get("id"));

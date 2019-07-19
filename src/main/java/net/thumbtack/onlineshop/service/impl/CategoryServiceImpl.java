@@ -13,19 +13,33 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public void addCategory(Category category) {
-        categoryRepository.addCategory(category);
+    @Override
+    public int addCategory(Category category) {
+        return categoryRepository.addCategory(category);
     }
+
+    @Override
     public Category getCategory(int id){
         return categoryRepository.getCategoryById(id);
     }
+
+    @Override
     public void updateCategory(Category category){
         categoryRepository.updateCategory(category);
     }
+
+    @Override
     public void deleteCategory(int id) {
         categoryRepository.deleteCategory(id);
     }
+
+    @Override
     public List<Category> getAllCategories() {
         return categoryRepository.getAllCategories();
+    }
+
+    @Override
+    public List<Category> getAllProductCategoriesById(int id) {
+        return categoryRepository.getAllCategoriesById(id);
     }
 }

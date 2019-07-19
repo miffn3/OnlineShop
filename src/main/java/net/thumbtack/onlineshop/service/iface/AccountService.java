@@ -1,8 +1,7 @@
 package net.thumbtack.onlineshop.service.iface;
 
-
-import net.thumbtack.onlineshop.entity.Administrator;
+import net.thumbtack.onlineshop.entity.User;
 
 public interface AccountService {
-    Administrator getAdminById(int id);
+    User getCurrentUserById(int id);
 }

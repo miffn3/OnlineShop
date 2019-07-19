@@ -31,7 +31,7 @@ public class AdministratorController {
             @RequestBody Administrator administrator) {
 
         try {
-            if(!administratorService.registration(administrator)) {
+            if(administratorService.registration(administrator) == -1) {
                 throw new LoginDuplicateException(administrator.getLogin());
             }
         } catch (OnlineShopException ex) {
@@ -50,7 +50,7 @@ public class AdministratorController {
                 null , null, null,  administrator.getPosition());
 
         HttpCookie cookie = ResponseCookie.from("JAVASESSIONID", session.getCookie())
-                .path("**/api/**")
+                .path("/api/")
                 .maxAge(30*60)
                 .build();
         return ResponseEntity.ok()

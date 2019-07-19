@@ -10,8 +10,8 @@ public class CategoryMapper implements RowMapper<Category> {
     @Override
     public Category mapRow(ResultSet resultSet, int i) throws SQLException {
         Category category = new Category();
-        category.setId(resultSet.getInt("id"));
-        category.setName(resultSet.getString("name"));
+        category.setId(resultSet.getInt("category_Id"));
+        category.setName(resultSet.getString("categoryName"));
         category.setParentId(resultSet.getInt("parentId"));
         category.setParentName(resultSet.getString("parentName"));
         return category;

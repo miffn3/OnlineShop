@@ -27,7 +27,14 @@ public class ProductController {
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @RequestBody Product product) {
 
-        productService.addProduct(product);
+        Session session;
+        try {
+            session = sessionService.getSession(cookie);
+        } catch (OnlineShopException ex) {
+            throw ex;
+        }
+
+        product.setId(productService.addProduct(product));
         return new ResponseEntity<>(product,HttpStatus.OK);
     }
 
@@ -35,6 +42,13 @@ public class ProductController {
     public ResponseEntity<Product> getProduct(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable int id) {
+
+        Session session;
+        try {
+            session = sessionService.getSession(cookie);
+        } catch (OnlineShopException ex) {
+            throw ex;
+        }
 
         Product product = this.productService.getProduct(id);
         return new ResponseEntity<>(product, HttpStatus.OK);

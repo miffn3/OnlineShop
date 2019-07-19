@@ -4,17 +4,14 @@ import net.thumbtack.onlineshop.entity.Category;
 import net.thumbtack.onlineshop.entity.Product;
 import net.thumbtack.onlineshop.repository.mapper.CategoryMapper;
 import net.thumbtack.onlineshop.repository.mapper.ProductMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class ProductExtractor implements ResultSetExtractor<Product> {
     private ProductMapper productMapper;
     private CategoryMapper categoryMapper;
@@ -36,9 +33,10 @@ public class ProductExtractor implements ResultSetExtractor<Product> {
                 List<Category> categories = new ArrayList<>();
                 product.setCategories(categories);
             }
-
             product.addCategory(categoryMapper.mapRow(rs,row));
+            row++;
         }
+
         return product;
     }
 }

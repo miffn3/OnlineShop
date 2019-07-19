@@ -57,8 +57,8 @@ CREATE TABLE cart_item (
 CREATE TABLE product_category (
   productId INT(11),
   categoryId INT(11),
-  FOREIGN KEY (productId) REFERENCES product(id),
-  FOREIGN KEY (categoryId) REFERENCES category(id)
+  FOREIGN KEY (productId) REFERENCES product(id) ON DELETE RESTRICT ,
+  FOREIGN KEY (categoryId) REFERENCES category(id) ON DELETE RESTRICT
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
 

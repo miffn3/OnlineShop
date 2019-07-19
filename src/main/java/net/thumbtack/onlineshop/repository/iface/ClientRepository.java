@@ -5,7 +5,7 @@ import net.thumbtack.onlineshop.entity.Client;
 import java.util.List;
 
 public interface ClientRepository {
-    void addClient(Client client);
+    int addClient(Client client);
     Client getClientById(int id);
     void deleteClient(int id);
     void updateClient(Client client);

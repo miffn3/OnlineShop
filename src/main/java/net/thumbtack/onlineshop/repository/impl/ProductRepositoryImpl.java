@@ -1,45 +1,45 @@
 package net.thumbtack.onlineshop.repository.impl;
 
 import net.thumbtack.onlineshop.entity.Product;
-import net.thumbtack.onlineshop.repository.extractor.ProductExtractor;
+import net.thumbtack.onlineshop.repository.extractor.ProductsExtractor;
 import net.thumbtack.onlineshop.repository.iface.ProductRepository;
-import net.thumbtack.onlineshop.repository.mapper.CategoryMapper;
 import net.thumbtack.onlineshop.repository.mapper.ProductMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ProductRepositoryImpl implements ProductRepository {
     private JdbcTemplate jdbcTemplate;
     private ProductMapper productMapper;
-    private CategoryMapper categoryMapper;
 
-    public ProductRepositoryImpl(JdbcTemplate jdbcTemplate, ProductMapper productMapper, CategoryMapper categoryMapper) {
+    public ProductRepositoryImpl(JdbcTemplate jdbcTemplate, ProductMapper productMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.productMapper = productMapper;
-        this.categoryMapper = categoryMapper;
     }
 
     @Override
-    public void addProduct(Product product){
+    public int addProduct(Product product){
         if(product == null) {
             throw new IllegalArgumentException();
         }
-        jdbcTemplate.update("INSERT INTO product (name, price, count) VALUES (?,?,?)",
-                product.getName(),
-                product.getPrice(),
-                product.getCount());
-
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        simpleJdbcInsert.withTableName("product").usingGeneratedKeyColumns("id");
+        Map<String, Object> parameters = new HashMap<>(3);
+        parameters.put("name", product.getName());
+        parameters.put("price", product.getPrice());
+        parameters.put("count", product.getCount());
+        Number newId = simpleJdbcInsert.executeAndReturnKey(parameters);
+        return (int) newId;
     }
 
     @Override
     public Product getProductById(int id){
-        return jdbcTemplate.query("SELECT product.id AS id, product.name AS name, price, count, " +
-                "category.id AS category_Id, category.name AS categoryName, parentId, parentName " +
-                "FROM product JOIN product_category ON productId=product.id JOIN category ON category.id=categoryId " +
-                "WHERE product.id=?", new ProductExtractor(productMapper,categoryMapper), id);
+        return jdbcTemplate.queryForObject("SELECT id, name, price, count " +
+                "FROM product WHERE id=?", new Object[]{id}, productMapper);
     }
 
     @Override
@@ -49,7 +49,15 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void updateProduct(Product product){
-
+        if (product == null) {
+            throw new IllegalArgumentException();
+        }
+        jdbcTemplate.update("UPDATE product SET" +
+                " name=?, count=?, price=? WHERE id = ?",
+                product.getName(),
+                product.getCount(),
+                product.getPrice(),
+                product.getId());
     }
 
     @Override
@@ -64,7 +72,12 @@ public class ProductRepositoryImpl implements ProductRepository {
             product.setCount((int)row.get("count"));
             products.add(product);
         });
-
         return products;
+    }
+
+    @Override
+    public void addProductCategory(int productId, int categoryId) {
+        jdbcTemplate.update("INSERT INTO product_category (productId, categoryId)  VALUES(?,?)",
+                productId,categoryId);
     }
 }

@@ -12,23 +12,9 @@ import java.io.IOException;
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(LoginDuplicateException.class)
-    public void springHandleDuplicateLogin(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value());
-    }
-
-    @ExceptionHandler(PasswordShortLengthException.class)
-    public void springHandleShortPassword(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value());
-    }
-
-    @ExceptionHandler(PasswordLongLengthException.class)
-    public void springHandleLongPassword(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value());
-    }
-
-    @ExceptionHandler(LoginNotFoundException.class)
-    public void springHandleAuthorizationLogin(HttpServletResponse response) throws IOException {
+    @ExceptionHandler({LoginDuplicateException.class, PasswordLongLengthException.class,
+            PasswordShortLengthException.class, LoginNotFoundException.class, PasswordAuthorizationException.class})
+    public void springHandleBadRequest(HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value());
     }
 

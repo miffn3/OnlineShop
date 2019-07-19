@@ -1,6 +1,8 @@
 package net.thumbtack.onlineshop.config;
 
 import com.google.gson.Gson;
+import net.thumbtack.onlineshop.repository.extractor.ProductExtractor;
+import net.thumbtack.onlineshop.repository.extractor.ProductsExtractor;
 import net.thumbtack.onlineshop.repository.iface.*;
 import net.thumbtack.onlineshop.repository.impl.*;
 import net.thumbtack.onlineshop.repository.mapper.AdministratorMapper;
@@ -42,6 +44,7 @@ public class Config {
         return new SessionMapper();
     }
 
+
     @Bean
     public AdministratorRepository administratorRepository(JdbcTemplate jdbcTemplate, AdministratorMapper administratorMapper) {
         return new AdministratorRepositoryImpl(jdbcTemplate, administratorMapper);
@@ -63,13 +66,14 @@ public class Config {
     }
 
     @Bean
-    public ProductRepository productRepository(JdbcTemplate jdbcTemplate, ProductMapper productMapper, CategoryMapper categoryMapper) {
-        return new ProductRepositoryImpl(jdbcTemplate, productMapper, categoryMapper);
+    public ProductRepository productRepository(JdbcTemplate jdbcTemplate, ProductMapper productMapper) {
+        return new ProductRepositoryImpl(jdbcTemplate,  productMapper);
     }
 
     @Bean
-    public ProductService productService(ProductRepository productRepository) {
-        return new ProductServiceImpl(productRepository);
+    public ProductService productService(ProductRepository productRepository ,
+                                         CategoryService categoryService) {
+        return new ProductServiceImpl(productRepository, categoryService);
     }
 
     @Bean
@@ -83,8 +87,8 @@ public class Config {
     }
 
     @Bean
-    public AccountService accountService(AdministratorService administratorService, SessionService sessionService) {
-        return new AccountServiceImpl(administratorService, sessionService);
+    public AccountService accountService(AdministratorService administratorService, ClientService clientService) {
+        return new AccountServiceImpl(administratorService, clientService);
     }
 
     @Bean
