@@ -1,4 +1,9 @@
 package net.thumbtack.onlineshop.repository.iface;
 
-public interface CartRepository {
+import net.thumbtack.onlineshop.entity.Cart;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CartRepository extends CrudRepository<Cart, Long> {
 }

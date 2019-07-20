@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-public class AdministratorDto {
+public class ClientDto {
 
     @NotBlank(message = "First name is mandatory")
     @Size(max = 50 , message = "First name should be less than 50 symbols")
@@ -29,6 +29,12 @@ public class AdministratorDto {
     @Size(min = 8, max = 50, message = "Password should be between 8 and 50")
     private String password;
 
-    @NotBlank(message = "Position is mandatory")
-    private String position;
+    @NotBlank(message = "Email is mandatory")
+    private String email;
+
+    @NotBlank(message = "Address is mandatory")
+    private String address;
+
+    @NotBlank(message = "Phone is mandatory")
+    private String phone;
 }

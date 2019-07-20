@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
-
 import static javax.persistence.DiscriminatorType.STRING;
 
 @Data
@@ -23,7 +22,7 @@ public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Long id;
 
     @Column(name = "first_name")
     private String firstName;

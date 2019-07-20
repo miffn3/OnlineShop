@@ -1,16 +1,9 @@
 package net.thumbtack.onlineshop.config;
 
-import com.google.gson.Gson;
-
-import net.thumbtack.onlineshop.repository.iface.AdministratorRepository;
-import net.thumbtack.onlineshop.repository.iface.CategoryRepository;
-import net.thumbtack.onlineshop.repository.iface.ProductRepository;
-import net.thumbtack.onlineshop.service.iface.AdministratorService;
-import net.thumbtack.onlineshop.service.iface.CategoryService;
-import net.thumbtack.onlineshop.service.iface.ProductService;
-import net.thumbtack.onlineshop.service.impl.AdministratorServiceImpl;
-import net.thumbtack.onlineshop.service.impl.CategoryServiceImpl;
-import net.thumbtack.onlineshop.service.impl.ProductServiceImpl;
+import net.thumbtack.onlineshop.repository.iface.*;
+import net.thumbtack.onlineshop.service.iface.*;
+import net.thumbtack.onlineshop.service.impl.*;
+import net.thumbtack.onlineshop.validation.DuplicateLoginConstraintValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,8 +25,27 @@ public class Config {
         return new AdministratorServiceImpl(administratorRepository);
     }
 
+
     @Bean
-    public Gson gson() {
-        return new Gson();
+    public SessionService sessionService(SessionRepository sessionRepository,
+                                         AdministratorService administratorService) {
+        return new SessionServiceImpl(sessionRepository, administratorService);
+    }
+
+    @Bean
+    public AccountService accountService(AdministratorService administratorService, ClientService clientService) {
+        return new AccountServiceImpl(administratorService, clientService);
+    }
+
+
+    @Bean
+    public ClientService clientService(ClientRepository clientRepository) {
+        return new ClientServiceImpl(clientRepository);
+    }
+
+    @Bean
+    public DuplicateLoginConstraintValidator uniqueLoginConstraintValidator(AdministratorService administratorService,
+                                                                            ClientService clientService) {
+        return new DuplicateLoginConstraintValidator(administratorService, clientService);
     }
 }
