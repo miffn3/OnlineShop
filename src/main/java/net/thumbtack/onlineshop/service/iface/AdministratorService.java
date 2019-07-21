@@ -15,5 +15,6 @@ public interface AdministratorService {
     Administrator getAdminByLogin(String login);
     Set<Administrator> getAllAdmins();
     boolean isLoginExist(String login);
-    boolean isPasswordExist(String password);
+    boolean isUserExist(String login, String password);
+    boolean isPasswordCorrect(String password);
 }

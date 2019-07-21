@@ -1,8 +1,8 @@
 package net.thumbtack.onlineshop.controller;
 
-import net.thumbtack.onlineshop.exception.LoginDuplicateException;
 import net.thumbtack.onlineshop.exception.LoginNotFoundException;
-import net.thumbtack.onlineshop.exception.SessionException;
+import net.thumbtack.onlineshop.exception.SessionAccessDeniedException;
+import net.thumbtack.onlineshop.exception.SessionDoesntExistException;
 import net.thumbtack.onlineshop.validation.Error;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,20 +27,14 @@ import java.util.Map;
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
-    @ExceptionHandler({LoginDuplicateException.class, LoginNotFoundException.class})
+    @ExceptionHandler({LoginNotFoundException.class, ConstraintViolationException.class})
     public void springHandleBadRequest(HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.BAD_REQUEST.value());
     }
 
-    @ExceptionHandler(SessionException.class)
+    @ExceptionHandler({SessionDoesntExistException.class, SessionAccessDeniedException.class})
     public void springHandleSession(HttpServletResponse response) throws IOException {
         response.sendError(HttpStatus.FORBIDDEN.value());
-    }
-
-
-    @ExceptionHandler(ConstraintViolationException.class)
-    public void constraintViolationException(HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value());
     }
 
     @Override

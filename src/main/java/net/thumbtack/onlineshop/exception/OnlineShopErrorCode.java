@@ -3,7 +3,7 @@ package net.thumbtack.onlineshop.exception;
 public enum OnlineShopErrorCode {
 
     USER_WRONG_LOGIN("Wrong login %s"),
-    USER_LOGIN_DUPLICATE("User %s is already exist"),
+    SESSION_ACCESS_COOKIE("User doesn't have permission to do this"),
     SESSION_WRONG_COOKIE("Session with this cookie doesn't exist"),;
 
 

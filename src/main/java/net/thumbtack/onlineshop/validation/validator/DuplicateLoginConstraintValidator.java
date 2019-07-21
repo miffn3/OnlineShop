@@ -1,8 +1,9 @@
-package net.thumbtack.onlineshop.validation;
+package net.thumbtack.onlineshop.validation.validator;
 
 
 import net.thumbtack.onlineshop.service.iface.AdministratorService;
 import net.thumbtack.onlineshop.service.iface.ClientService;
+import net.thumbtack.onlineshop.validation.annotation.DuplicateLogin;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

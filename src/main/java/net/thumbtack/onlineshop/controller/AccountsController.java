@@ -2,8 +2,7 @@ package net.thumbtack.onlineshop.controller;
 
 import net.thumbtack.onlineshop.entity.Session;
 import net.thumbtack.onlineshop.entity.User;
-import net.thumbtack.onlineshop.exception.OnlineShopException;
-import net.thumbtack.onlineshop.exception.SessionException;
+import net.thumbtack.onlineshop.exception.SessionDoesntExistException;
 import net.thumbtack.onlineshop.service.iface.AccountService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,7 @@ public class AccountsController {
         Session session = sessionService.getSession(cookie);
 
         if (session == null) {
-            throw new SessionException();
+            throw new SessionDoesntExistException();
         }
 
         User user = accountService.getCurrentUserById(session.getUserId());

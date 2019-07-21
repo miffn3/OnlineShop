@@ -1,27 +1,13 @@
 package net.thumbtack.onlineshop.dto.request;
 
+import lombok.Data;
+import net.thumbtack.onlineshop.validation.annotation.IncorrectLoginPasswordPair;
+
+@Data
+@IncorrectLoginPasswordPair
 public class LogInRequestDto {
+
     private String login;
+
     private String password;
-
-    public LogInRequestDto(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

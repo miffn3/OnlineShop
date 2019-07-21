@@ -3,7 +3,9 @@ package net.thumbtack.onlineshop.config;
 import net.thumbtack.onlineshop.repository.iface.*;
 import net.thumbtack.onlineshop.service.iface.*;
 import net.thumbtack.onlineshop.service.impl.*;
-import net.thumbtack.onlineshop.validation.DuplicateLoginConstraintValidator;
+import net.thumbtack.onlineshop.validation.validator.DuplicateLoginConstraintValidator;
+import net.thumbtack.onlineshop.validation.validator.IncorrectLoginPasswordConstraintValidator;
+import net.thumbtack.onlineshop.validation.validator.IncorrectPasswordConstraintValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,8 +30,8 @@ public class Config {
 
     @Bean
     public SessionService sessionService(SessionRepository sessionRepository,
-                                         AdministratorService administratorService) {
-        return new SessionServiceImpl(sessionRepository, administratorService);
+                                         AdministratorService administratorService, ClientService clientService) {
+        return new SessionServiceImpl(sessionRepository, administratorService, clientService);
     }
 
     @Bean
@@ -44,8 +46,20 @@ public class Config {
     }
 
     @Bean
-    public DuplicateLoginConstraintValidator uniqueLoginConstraintValidator(AdministratorService administratorService,
+    public DuplicateLoginConstraintValidator duplicateLoginConstraintValidator(AdministratorService administratorService,
                                                                             ClientService clientService) {
         return new DuplicateLoginConstraintValidator(administratorService, clientService);
+    }
+
+    @Bean
+    public IncorrectLoginPasswordConstraintValidator incorrectLoginPasswordConstraintValidator(AdministratorService administratorService,
+                                                                                          ClientService clientService) {
+        return new IncorrectLoginPasswordConstraintValidator(administratorService, clientService);
+    }
+
+    @Bean
+    public IncorrectPasswordConstraintValidator incorrectPasswordConstraintValidator(AdministratorService administratorService,
+                                                                                     ClientService clientService) {
+        return new IncorrectPasswordConstraintValidator(administratorService, clientService);
     }
 }

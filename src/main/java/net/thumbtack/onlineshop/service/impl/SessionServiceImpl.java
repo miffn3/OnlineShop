@@ -1,8 +1,11 @@
 package net.thumbtack.onlineshop.service.impl;
 
+import net.thumbtack.onlineshop.entity.Administrator;
+import net.thumbtack.onlineshop.entity.Client;
 import net.thumbtack.onlineshop.entity.Session;
 import net.thumbtack.onlineshop.repository.iface.SessionRepository;
 import net.thumbtack.onlineshop.service.iface.AdministratorService;
+import net.thumbtack.onlineshop.service.iface.ClientService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 
 import java.util.Collection;
@@ -13,10 +16,13 @@ import java.util.UUID;
 public class SessionServiceImpl implements SessionService {
     private final SessionRepository sessionRepository;
     private final AdministratorService administratorService;
+    private final ClientService clientService;
 
-    public SessionServiceImpl(SessionRepository sessionRepository, AdministratorService administratorService) {
+    public SessionServiceImpl(SessionRepository sessionRepository, AdministratorService administratorService,
+                              ClientService clientService) {
         this.sessionRepository = sessionRepository;
         this.administratorService = administratorService;
+        this.clientService = clientService;
     }
 
     @Override
@@ -46,12 +52,25 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public Session logIn(String login, String password) {
-        return addSession(administratorService.getAdminByLogin(login).getId());
+        Administrator administrator = administratorService.getAdminByLogin(login);
+        Client client = clientService.getClientByLogin(login);
+        if (administrator != null) {
+            if (administratorService.isUserExist(login,password)) {
+                return addSession(administratorService.getAdminByLogin(login).getId());
+            }
+        }
+        if (client != null) {
+            if (clientService.isUserExist(login, password)) {
+                return addSession(clientService.getClientByLogin(login).getId());
+            }
+        }
+        return null;
     }
 
     @Override
     public void logOut(String cookie) {
-
+        Session session = getSession(cookie);
+        sessionRepository.delete(session);
     }
 
     private static String generateCookieValue() {

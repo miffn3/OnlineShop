@@ -1,71 +1,27 @@
 package net.thumbtack.onlineshop.dto.request;
 
+import lombok.Data;
+import net.thumbtack.onlineshop.validation.annotation.IncorrectPassword;
+
+import javax.validation.constraints.Size;
+
+@Data
 public class AdministratorUpdateRequestDto {
+
+    @Size(max = 50 , message = "First name should be less than 50 symbols")
     private String firstName;
+
+    @Size(max = 50, message = "Last name should be less than 50 symbols")
     private String lastName;
+
+    @Size(max = 50, message = "Patronymic should be less than 50 symbols")
     private String patronymic;
+
     private String position;
+
+    @IncorrectPassword
     private String oldPassword;
+
+    @Size(min = 8, max = 50, message = "Password should be between 8 and 50")
     private String newPassword;
-
-    public AdministratorUpdateRequestDto(String firstName, String lastName, String patronymic,
-                                         String position, String oldPassword, String newPassword) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.patronymic = patronymic;
-        this.position = position;
-        this.oldPassword = oldPassword;
-        this.newPassword = newPassword;
-    }
-
-    public AdministratorUpdateRequestDto() {
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
 }

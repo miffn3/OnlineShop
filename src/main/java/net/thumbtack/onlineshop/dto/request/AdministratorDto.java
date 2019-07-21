@@ -1,7 +1,7 @@
 package net.thumbtack.onlineshop.dto.request;
 
 import lombok.Data;
-import net.thumbtack.onlineshop.validation.DuplicateLogin;
+import net.thumbtack.onlineshop.validation.annotation.DuplicateLogin;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

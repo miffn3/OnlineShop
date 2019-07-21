@@ -3,6 +3,7 @@ package net.thumbtack.onlineshop.controller;
 import net.thumbtack.onlineshop.dto.request.ProductDto;
 import net.thumbtack.onlineshop.entity.Product;
 import net.thumbtack.onlineshop.entity.Session;
+import net.thumbtack.onlineshop.exception.SessionDoesntExistException;
 import net.thumbtack.onlineshop.service.iface.ProductService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpStatus;
@@ -25,24 +26,17 @@ public class ProductController {
 
     @PostMapping("/")
     public ResponseEntity<Product> addProduct(
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @RequestBody @Valid ProductDto productDto) {
 
-        Product tmp = productService.addProduct(productDto);
-        return new ResponseEntity<>(tmp, HttpStatus.OK);
+        Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
+
+        Product product = productService.addProduct(productDto);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
-
-
-
-//    @PostMapping("/")
-//    public ResponseEntity<Product> addProduct(
-//            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
-//            @RequestBody ProductDto productDto) {
-//
-//        Session session = sessionService.getSession(cookie);
-//
-//        Product product = (productService.addProduct(productDto));
-//        return new ResponseEntity<>(product,HttpStatus.OK);
-//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProduct(
@@ -50,6 +44,9 @@ public class ProductController {
             @PathVariable Long id) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
         Product product = this.productService.getProduct(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
@@ -62,6 +59,9 @@ public class ProductController {
             @RequestBody ProductDto productdto) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
         Product product = new Product();
 //        productService.updateProduct();
@@ -74,6 +74,9 @@ public class ProductController {
             @PathVariable Long id) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
         productService.deleteProduct(id);
         return ResponseEntity.ok().body(null);
@@ -84,6 +87,9 @@ public class ProductController {
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
         List<Product> allProducts = this.productService.getAllProducts();
         return new ResponseEntity<>(allProducts, HttpStatus.OK);

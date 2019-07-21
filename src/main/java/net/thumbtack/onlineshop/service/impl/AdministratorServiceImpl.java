@@ -22,7 +22,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     public Administrator addAdministrator(AdministratorDto administratorDto) {
         Administrator administrator = new Administrator();
         administrator.setPassword(administratorDto.getPassword());
-        administrator.setLogin(administratorDto.getLogin());
+        administrator.setLogin(administratorDto.getLogin().toLowerCase());
         administrator.setPatronymic(administratorDto.getPatronymic());
         administrator.setLastName(administratorDto.getLastName());
         administrator.setFirstName(administratorDto.getFirstName());
@@ -43,14 +43,20 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public Administrator editAdmin(AdministratorUpdateRequestDto updateRequestDto, Long id) {
-        return null;
+        Administrator administrator = administratorRepository.findById(id).get();
+        administrator.setFirstName(updateRequestDto.getFirstName());
+        administrator.setLastName(updateRequestDto.getLastName());
+        administrator.setPatronymic(updateRequestDto.getPatronymic());
+        administrator.setPosition(updateRequestDto.getPosition());
+        administrator.setPassword(updateRequestDto.getNewPassword());
+        return administratorRepository.save(administrator);
     }
 
     @Override
     public Administrator getAdminByLogin(String login) {
         Set<Administrator> administrators = new HashSet<>((Collection)administratorRepository.findAll());
         for (Administrator admin:administrators) {
-            if(admin.getLogin().equals(login)) {
+            if(admin.getLogin().equals(login.toLowerCase())) {
                 return admin;
             }
         }
@@ -65,11 +71,20 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Override
     public boolean isLoginExist(String login) {
         Set<Administrator> administrators = getAllAdmins();
-        return administrators.stream().filter(o -> o.getLogin().equals(login)).findFirst().isPresent();
+        return administrators.stream().filter(o -> o.getLogin().equals(login.toLowerCase())).findFirst().isPresent();
     }
 
     @Override
-    public boolean isPasswordExist(String password) {
-        return false;
+    public boolean isUserExist(String login, String password) {
+        Set<Administrator> administrators = getAllAdmins();
+
+        return administrators.stream().filter(o -> o.getLogin().equals(login.toLowerCase())
+                && o.getPassword().equals(password)).findFirst().isPresent();
+    }
+
+    @Override
+    public boolean isPasswordCorrect(String password) {
+        Set<Administrator> administrators = getAllAdmins();
+        return administrators.stream().filter(o -> o.getLogin().equals(password)).findFirst().isPresent();
     }
 }

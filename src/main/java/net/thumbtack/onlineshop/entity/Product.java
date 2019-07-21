@@ -3,15 +3,7 @@ package net.thumbtack.onlineshop.entity;
 
 import lombok.Data;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Data
@@ -20,13 +12,14 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "product_id")
     private Long id;
 
     private String name;
 
-    private int price;
+    private Long price;
 
-    private int count;
+    private Long count;
     @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                 CascadeType.PERSIST,

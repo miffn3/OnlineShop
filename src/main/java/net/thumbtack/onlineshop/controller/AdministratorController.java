@@ -4,8 +4,7 @@ import net.thumbtack.onlineshop.dto.request.AdministratorDto;
 import net.thumbtack.onlineshop.dto.request.AdministratorUpdateRequestDto;
 import net.thumbtack.onlineshop.entity.Administrator;
 import net.thumbtack.onlineshop.entity.Session;
-import net.thumbtack.onlineshop.entity.User;
-import net.thumbtack.onlineshop.exception.OnlineShopException;
+import net.thumbtack.onlineshop.exception.SessionDoesntExistException;
 import net.thumbtack.onlineshop.service.iface.AdministratorService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpCookie;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -51,9 +49,12 @@ public class AdministratorController {
     @PutMapping("/")
     public ResponseEntity<Administrator> editAdmin(
             @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
-            @RequestBody AdministratorUpdateRequestDto updateRequestDto) {
+            @RequestBody @Valid AdministratorUpdateRequestDto updateRequestDto) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
         Administrator administrator = this.administratorService.editAdmin(updateRequestDto, session.getUserId());
 

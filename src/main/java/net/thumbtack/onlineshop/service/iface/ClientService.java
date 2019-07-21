@@ -1,6 +1,7 @@
 package net.thumbtack.onlineshop.service.iface;
 
 import net.thumbtack.onlineshop.dto.request.ClientDto;
+import net.thumbtack.onlineshop.dto.request.ClientUpdateRequestDto;
 import net.thumbtack.onlineshop.entity.Client;
 import org.springframework.stereotype.Service;
 
@@ -9,8 +10,11 @@ import java.util.Set;
 @Service
 public interface ClientService {
     Client getClientById(Long id);
-    Set getAllClients();
+    Set<Client> getAllClients();
     Client addClient(ClientDto clientDto);
+    Client getClientByLogin(String login);
+    Client editClient(ClientUpdateRequestDto updateRequestDto, Long id);
     boolean isLoginExist(String login);
-    boolean isPasswordExist(String password);
+    boolean isUserExist(String login, String password);
+    boolean isPasswordCorrect(String password);
 }

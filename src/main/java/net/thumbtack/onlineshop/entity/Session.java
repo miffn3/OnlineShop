@@ -13,6 +13,6 @@ public class Session {
     @Id
     private String cookie;
 
-    @Column(name = "user_Id")
+    @Column(name = "user_id")
     private Long userId;
 }

@@ -1,6 +1,7 @@
 package net.thumbtack.onlineshop.service.impl;
 
 import net.thumbtack.onlineshop.dto.request.ProductDto;
+import net.thumbtack.onlineshop.dto.request.ProductUpdateRequestDto;
 import net.thumbtack.onlineshop.entity.Category;
 import net.thumbtack.onlineshop.entity.Product;
 import net.thumbtack.onlineshop.repository.iface.ProductRepository;
@@ -38,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(Product product) {
+    public void updateProduct(ProductUpdateRequestDto updateRequestDto) {
 
     }
 

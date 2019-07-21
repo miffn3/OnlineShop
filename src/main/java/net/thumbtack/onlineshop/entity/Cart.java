@@ -2,11 +2,9 @@ package net.thumbtack.onlineshop.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -14,8 +12,13 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-    private long clientId;
-//    private List<Product> products;
-    private int count;
+    @Column(name = "cart_id")
+    private Long id;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @OneToMany(mappedBy="cart")
+    private Set<Items> items;
+
 }

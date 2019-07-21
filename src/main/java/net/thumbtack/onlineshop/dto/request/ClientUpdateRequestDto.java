@@ -1,60 +1,31 @@
 package net.thumbtack.onlineshop.dto.request;
 
+import lombok.Data;
+import net.thumbtack.onlineshop.validation.annotation.IncorrectPassword;
+
+import javax.validation.constraints.Size;
+
+@Data
 public class ClientUpdateRequestDto {
+
+    @Size(max = 50 , message = "First name should be less than 50 symbols")
     private String firstName;
+
+    @Size(max = 50, message = "Last name should be less than 50 symbols")
     private String lastName;
+
+    @Size(max = 50, message = "Patronymic should be less than 50 symbols")
     private String patronymic;
+
+    @IncorrectPassword
     private String oldPassword;
+
+    @Size(min = 8, max = 50, message = "Password should be between 8 and 50")
     private String newPassword;
 
-    public ClientUpdateRequestDto(String firstName, String lastName, String patronymic, String oldPassword, String newPassword) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.patronymic = patronymic;
-        this.oldPassword = oldPassword;
-        this.newPassword = newPassword;
-    }
+    private String email;
 
-    public ClientUpdateRequestDto() {
-    }
+    private String address;
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
+    private String phone;
 }

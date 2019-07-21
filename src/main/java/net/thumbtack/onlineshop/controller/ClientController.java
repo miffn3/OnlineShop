@@ -1,10 +1,13 @@
 package net.thumbtack.onlineshop.controller;
 
 import net.thumbtack.onlineshop.dto.request.ClientDto;
+import net.thumbtack.onlineshop.dto.request.ClientUpdateRequestDto;
 import net.thumbtack.onlineshop.entity.Administrator;
 import net.thumbtack.onlineshop.entity.Client;
 import net.thumbtack.onlineshop.entity.Session;
-import net.thumbtack.onlineshop.exception.OnlineShopException;
+import net.thumbtack.onlineshop.exception.SessionAccessDeniedException;
+import net.thumbtack.onlineshop.exception.SessionDoesntExistException;
+import net.thumbtack.onlineshop.service.iface.AdministratorService;
 import net.thumbtack.onlineshop.service.iface.ClientService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpCookie;
@@ -14,9 +17,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -24,16 +26,26 @@ import java.util.Set;
 public class ClientController {
     private final ClientService clientService;
     private final SessionService sessionService;
+    private final AdministratorService administratorService;
 
-    public ClientController(ClientService clientService, SessionService sessionService) {
+    public ClientController(ClientService clientService, SessionService sessionService, AdministratorService administratorService) {
         this.clientService = clientService;
         this.sessionService = sessionService;
+        this.administratorService = administratorService;
     }
 
     @GetMapping("/")
     public ResponseEntity<Set<Client>> getAllClients(@CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
+
+        Administrator administrator = administratorService.getAdministratorById(session.getUserId());
+        if (administrator == null) {
+            throw new SessionAccessDeniedException();
+        }
 
         Set<Client> clients = this.clientService.getAllClients();
         Set<Client> allClients = new HashSet<>();
@@ -49,10 +61,11 @@ public class ClientController {
     @PostMapping("/")
     public ResponseEntity<Client> registrationClient(@RequestBody ClientDto clientDto) {
 
-        Client  client = clientService.addClient(clientDto);
+        Client client = clientService.addClient(clientDto);
         Session session = sessionService.logIn(client.getLogin(), client.getPassword());
         client.setLogin(null);
         client.setPassword(null);
+        client.setDeposit(null);
         HttpCookie cookie = ResponseCookie.from("JAVASESSIONID", session.getCookie())
                 .path("/api/")
                 .maxAge(30*60)
@@ -61,5 +74,20 @@ public class ClientController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(client);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<Client> editClient(
+            @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
+            @RequestBody @Valid ClientUpdateRequestDto updateRequestDto) {
+
+        Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
+
+        Client client = this.clientService.editClient(updateRequestDto, session.getUserId());
+
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 }

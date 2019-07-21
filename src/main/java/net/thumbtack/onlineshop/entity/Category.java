@@ -2,10 +2,8 @@ package net.thumbtack.onlineshop.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -17,7 +15,16 @@ public class Category {
 
     private String name;
 
-    private Integer parentId;
+    @Column(name = "parent_id")
+    private Long parentId;
 
+    @Column(name = "parent_name")
     private String parentName;
+
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER,
+            orphanRemoval = true)
+    @JoinColumn(name = "parent_id")
+    private List<Category> categories;
 }

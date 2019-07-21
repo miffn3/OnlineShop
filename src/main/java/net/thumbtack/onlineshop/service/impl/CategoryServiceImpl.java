@@ -1,10 +1,13 @@
 package net.thumbtack.onlineshop.service.impl;
 
+import net.thumbtack.onlineshop.dto.request.CategoryCreateRequestDto;
+import net.thumbtack.onlineshop.dto.request.CategoryUpdateRequestDto;
 import net.thumbtack.onlineshop.entity.Category;
 import net.thumbtack.onlineshop.repository.iface.CategoryRepository;
 import net.thumbtack.onlineshop.service.iface.CategoryService;
 
 import java.util.List;
+import java.util.Set;
 
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
@@ -14,8 +17,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category addCategory(Category category) {
-        return null;
+    public Category addCategory(CategoryCreateRequestDto createRequestDto) {
+        Category category = new Category();
+        category.setName(createRequestDto.getName());
+        category.setParentId(createRequestDto.getParentId());
+        return categoryRepository.save(category);
     }
 
     @Override
@@ -24,22 +30,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void updateCategory(Category category) {
+    public void updateCategory(CategoryUpdateRequestDto updateRequestDto) {
 
     }
 
     @Override
     public void deleteCategory(Long id) {
-
+        categoryRepository.deleteById(id);
     }
 
     @Override
-    public List<Category> getAllCategories() {
+    public Set<Category> getAllCategories() {
         return null;
     }
 
     @Override
-    public List<Category> getAllProductCategoriesById(Long id) {
+    public Set<Category> getAllProductCategoriesById(Long id) {
         return null;
     }
 }

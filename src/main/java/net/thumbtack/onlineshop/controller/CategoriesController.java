@@ -1,17 +1,17 @@
 package net.thumbtack.onlineshop.controller;
 
 import net.thumbtack.onlineshop.dto.request.CategoryCreateRequestDto;
-import net.thumbtack.onlineshop.dto.request.EditCategoryRequestDto;
+import net.thumbtack.onlineshop.dto.request.CategoryUpdateRequestDto;
 import net.thumbtack.onlineshop.entity.Category;
 import net.thumbtack.onlineshop.entity.Session;
-import net.thumbtack.onlineshop.exception.OnlineShopException;
+import net.thumbtack.onlineshop.exception.SessionDoesntExistException;
 import net.thumbtack.onlineshop.service.iface.CategoryService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/categories")
@@ -27,12 +27,15 @@ public class CategoriesController {
     @PostMapping("/")
     public ResponseEntity<Category> addCategory(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
-            Category category) {
+            CategoryCreateRequestDto createRequestDto) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
-        Category category1 = categoryService.addCategory(category);
-        return new ResponseEntity<>(category1, HttpStatus.OK);
+        Category category = categoryService.addCategory(createRequestDto);
+        return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -41,6 +44,9 @@ public class CategoriesController {
             @PathVariable Long id) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
         Category category = categoryService.getCategory(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
@@ -50,9 +56,12 @@ public class CategoriesController {
     public ResponseEntity<Category> editCategory(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable Long id,
-            @RequestBody EditCategoryRequestDto requestDto) {
+            @RequestBody CategoryUpdateRequestDto requestDto) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
         //TODO:Editing part
         Category category = categoryService.getCategory(id);
@@ -65,6 +74,9 @@ public class CategoriesController {
             @PathVariable Long id) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
         Category category = categoryService.getCategory(id);
         categoryService.deleteCategory(id);
@@ -72,12 +84,15 @@ public class CategoriesController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Category>> getAllCategories(
+    public ResponseEntity<Set<Category>> getAllCategories(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
-        List<Category> allCategories = categoryService.getAllCategories();
+        Set<Category> allCategories = categoryService.getAllCategories();
 
         return new ResponseEntity<>(allCategories, HttpStatus.OK);
     }

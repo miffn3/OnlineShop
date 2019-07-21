@@ -1,6 +1,7 @@
 package net.thumbtack.onlineshop.service.impl;
 
 import net.thumbtack.onlineshop.dto.request.ClientDto;
+import net.thumbtack.onlineshop.dto.request.ClientUpdateRequestDto;
 import net.thumbtack.onlineshop.entity.Client;
 import net.thumbtack.onlineshop.repository.iface.ClientRepository;
 import net.thumbtack.onlineshop.service.iface.ClientService;
@@ -30,7 +31,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Set getAllClients() {
+    public Set<Client> getAllClients() {
         return new HashSet<>((Collection)clientRepository.findAll());
     }
 
@@ -38,7 +39,7 @@ public class ClientServiceImpl implements ClientService {
     public Client addClient(ClientDto clientDto) {
         Client client = new Client();
         client.setPassword(clientDto.getPassword());
-        client.setLogin(clientDto.getLogin());
+        client.setLogin(clientDto.getLogin().toLowerCase());
         client.setPatronymic(clientDto.getPatronymic());
         client.setLastName(clientDto.getLastName());
         client.setFirstName(clientDto.getFirstName());
@@ -52,13 +53,45 @@ public class ClientServiceImpl implements ClientService {
     public boolean isLoginExist(String login) {
         Set<Client> clients = getAllClients();
 
-        return clients.stream().filter(o -> o.getLogin().equals(login)).findFirst().isPresent();
+        return clients.stream().filter(o -> o.getLogin().equals(login.toLowerCase())).findFirst().isPresent();
     }
 
     @Override
-    public boolean isPasswordExist(String password) {
-        return false;
+    public boolean isUserExist(String login, String password) {
+        Set<Client> clients = getAllClients();
+
+        return clients.stream().filter(o -> o.getLogin().equals(login.toLowerCase())
+                && o.getPassword().equals(password)).findFirst().isPresent();
     }
 
+    @Override
+    public boolean isPasswordCorrect(String password) {
+        Set<Client> clients = getAllClients();
 
+        return clients.stream().filter(o -> o.getLogin().equals(password)).findFirst().isPresent();
+    }
+
+    @Override
+    public Client getClientByLogin(String login) {
+        Set<Client> clients = new HashSet<>((Collection)clientRepository.findAll());
+        for (Client client:clients) {
+            if(client.getLogin().equals(login.toLowerCase())) {
+                return client;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Client editClient(ClientUpdateRequestDto updateRequestDto, Long id) {
+        Client client = clientRepository.findById(id).get();
+        client.setFirstName(updateRequestDto.getFirstName());
+        client.setLastName(updateRequestDto.getLastName());
+        client.setPatronymic(updateRequestDto.getPatronymic());
+        client.setPassword(updateRequestDto.getNewPassword());
+        client.setPhone(updateRequestDto.getPhone());
+        client.setAddress(updateRequestDto.getAddress());
+        client.setEmail(updateRequestDto.getEmail());
+        return clientRepository.save(client);
+    }
 }

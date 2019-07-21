@@ -1,4 +1,6 @@
-package net.thumbtack.onlineshop.validation;
+package net.thumbtack.onlineshop.validation.annotation;
+
+import net.thumbtack.onlineshop.validation.validator.DuplicateLoginConstraintValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

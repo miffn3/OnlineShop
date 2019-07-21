@@ -3,7 +3,7 @@ package net.thumbtack.onlineshop.controller;
 import net.thumbtack.onlineshop.dto.request.LogInRequestDto;
 import net.thumbtack.onlineshop.entity.Session;
 import net.thumbtack.onlineshop.entity.User;
-import net.thumbtack.onlineshop.exception.OnlineShopException;
+import net.thumbtack.onlineshop.exception.SessionDoesntExistException;
 import net.thumbtack.onlineshop.service.iface.AccountService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpCookie;
@@ -11,6 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/session")
@@ -24,7 +26,8 @@ public class SessionController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<User> logIn(@RequestBody LogInRequestDto loginData){
+    public ResponseEntity<User> logIn(@RequestBody @Valid LogInRequestDto loginData){
+
 
         Session session = sessionService.logIn(loginData.getLogin(), loginData.getPassword());
 
@@ -45,6 +48,9 @@ public class SessionController {
 
 
         Session session = sessionService.getSession(cookie);
+        if (session == null) {
+            throw new SessionDoesntExistException();
+        }
 
         sessionService.logOut(cookie);
         return ResponseEntity.ok().body(null);

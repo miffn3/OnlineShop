@@ -19,4 +19,6 @@ public class Client extends User {
     private String phone;
 
     private Integer deposit;
+
+
 }
