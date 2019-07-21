@@ -71,20 +71,20 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Override
     public boolean isLoginExist(String login) {
         Set<Administrator> administrators = getAllAdmins();
-        return administrators.stream().filter(o -> o.getLogin().equals(login.toLowerCase())).findFirst().isPresent();
+        return administrators.stream().filter(o -> o.getLogin().toLowerCase().equals(login.toLowerCase())).findFirst().isPresent();
     }
 
     @Override
     public boolean isUserExist(String login, String password) {
         Set<Administrator> administrators = getAllAdmins();
 
-        return administrators.stream().filter(o -> o.getLogin().equals(login.toLowerCase())
+        return administrators.stream().filter(o -> o.getLogin().toLowerCase().equals(login.toLowerCase())
                 && o.getPassword().equals(password)).findFirst().isPresent();
     }
 
     @Override
     public boolean isPasswordCorrect(String password) {
         Set<Administrator> administrators = getAllAdmins();
-        return administrators.stream().filter(o -> o.getLogin().equals(password)).findFirst().isPresent();
+        return administrators.stream().filter(o -> o.getPassword().equals(password)).findFirst().isPresent();
     }
 }

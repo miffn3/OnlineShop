@@ -63,7 +63,7 @@ public class CategoriesController {
             throw new SessionDoesntExistException();
         }
 
-        //TODO:Editing part
+        categoryService.updateCategory(requestDto, id);
         Category category = categoryService.getCategory(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }

@@ -56,7 +56,7 @@ public class ProductController {
     public ResponseEntity<Product> editProduct(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable Long id,
-            @RequestBody ProductDto productdto) {
+            @RequestBody ProductDto productDto) {
 
         Session session = sessionService.getSession(cookie);
         if (session == null) {
@@ -64,7 +64,7 @@ public class ProductController {
         }
 
         Product product = new Product();
-//        productService.updateProduct();
+        productService.updateProduct(productDto, id);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 

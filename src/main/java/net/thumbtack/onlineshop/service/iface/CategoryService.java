@@ -12,8 +12,7 @@ import java.util.Set;
 public interface CategoryService {
     Category addCategory(CategoryCreateRequestDto createRequestDto);
     Category getCategory(Long id);
-    void updateCategory(CategoryUpdateRequestDto updateRequestDto);
+    Category updateCategory(CategoryUpdateRequestDto updateRequestDto, Long id);
     void deleteCategory(Long id);
     Set<Category> getAllCategories();
-    Set<Category> getAllProductCategoriesById(Long id);
 }

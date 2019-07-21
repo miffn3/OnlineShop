@@ -10,15 +10,12 @@ import java.util.List;
 @Data
 public class ProductDto {
 
-    @NotBlank
     @Size(max = 50)
     private String name;
 
-    @NotNull
-    private Integer price;
+    private Long price;
 
-    @NotNull
-    private int count;
+    private Long count;
 
     List<Long> categories;
 }

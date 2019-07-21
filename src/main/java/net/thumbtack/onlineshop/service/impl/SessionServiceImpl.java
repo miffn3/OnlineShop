@@ -56,12 +56,12 @@ public class SessionServiceImpl implements SessionService {
         Client client = clientService.getClientByLogin(login);
         if (administrator != null) {
             if (administratorService.isUserExist(login,password)) {
-                return addSession(administratorService.getAdminByLogin(login).getId());
+                return addSession(administrator.getId());
             }
         }
         if (client != null) {
             if (clientService.isUserExist(login, password)) {
-                return addSession(clientService.getClientByLogin(login).getId());
+                return addSession(client.getId());
             }
         }
         return null;

@@ -60,7 +60,7 @@ public class ClientServiceImpl implements ClientService {
     public boolean isUserExist(String login, String password) {
         Set<Client> clients = getAllClients();
 
-        return clients.stream().filter(o -> o.getLogin().equals(login.toLowerCase())
+        return clients.stream().filter(o -> o.getLogin().toLowerCase().equals(login.toLowerCase())
                 && o.getPassword().equals(password)).findFirst().isPresent();
     }
 
@@ -68,7 +68,7 @@ public class ClientServiceImpl implements ClientService {
     public boolean isPasswordCorrect(String password) {
         Set<Client> clients = getAllClients();
 
-        return clients.stream().filter(o -> o.getLogin().equals(password)).findFirst().isPresent();
+        return clients.stream().filter(o -> o.getPassword().toLowerCase().equals(password)).findFirst().isPresent();
     }
 
     @Override
