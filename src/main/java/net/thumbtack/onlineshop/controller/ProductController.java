@@ -63,8 +63,7 @@ public class ProductController {
             throw new SessionDoesntExistException();
         }
 
-        Product product = new Product();
-        productService.updateProduct(productDto, id);
+        Product product = productService.updateProduct(productDto, id);
         return new ResponseEntity<>(product, HttpStatus.OK);
     }
 

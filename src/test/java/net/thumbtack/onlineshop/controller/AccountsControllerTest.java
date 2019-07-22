@@ -5,7 +5,6 @@ import net.thumbtack.onlineshop.entity.Client;
 import net.thumbtack.onlineshop.entity.Session;
 import net.thumbtack.onlineshop.entity.User;
 import net.thumbtack.onlineshop.service.iface.AccountService;
-import net.thumbtack.onlineshop.service.iface.ClientService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.junit.Before;
 import org.junit.Test;
