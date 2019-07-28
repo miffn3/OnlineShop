@@ -53,6 +53,7 @@ public class ClientController {
             client.setDeposit(null);
             client.setLogin(null);
             client.setPassword(null);
+            client.setProducts(null);
             allClients.add(client);
         }
         return new ResponseEntity<>(allClients, HttpStatus.OK);
@@ -66,6 +67,7 @@ public class ClientController {
         client.setLogin(null);
         client.setPassword(null);
         client.setDeposit(null);
+        client.setProducts(null);
         HttpCookie cookie = ResponseCookie.from("JAVASESSIONID", session.getCookie())
                 .path("/api/")
                 .maxAge(30*60)

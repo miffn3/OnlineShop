@@ -25,7 +25,6 @@ public class ClientServiceImpl implements ClientService {
         if(clientTmp != null) {
             clientTmp.setLogin(null);
             clientTmp.setPassword(null);
-            clientTmp.setDeposit(null);
         }
         return clientTmp;
     }
@@ -69,6 +68,24 @@ public class ClientServiceImpl implements ClientService {
         Set<Client> clients = getAllClients();
 
         return clients.stream().filter(o -> o.getPassword().toLowerCase().equals(password)).findFirst().isPresent();
+    }
+
+    @Override
+    public Long addMoney(Long deposit, Long id) {
+        Client client = getClientById(id);
+        Long newDeposit = client.getDeposit() + deposit;
+        client.setDeposit(newDeposit);
+        clientRepository.save(client);
+        return newDeposit;
+    }
+
+    @Override
+    public Long getMoney(Long deposit, Long id) {
+        Client client = getClientById(id);
+        Long newDeposit = client.getDeposit() - deposit;
+        client.setDeposit(newDeposit);
+        clientRepository.save(client);
+        return newDeposit;
     }
 
     @Override

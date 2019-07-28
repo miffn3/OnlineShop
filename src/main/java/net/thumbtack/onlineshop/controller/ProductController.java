@@ -1,9 +1,12 @@
 package net.thumbtack.onlineshop.controller;
 
 import net.thumbtack.onlineshop.dto.request.ProductDto;
+import net.thumbtack.onlineshop.entity.Administrator;
 import net.thumbtack.onlineshop.entity.Product;
 import net.thumbtack.onlineshop.entity.Session;
+import net.thumbtack.onlineshop.exception.SessionAccessDeniedException;
 import net.thumbtack.onlineshop.exception.SessionDoesntExistException;
+import net.thumbtack.onlineshop.service.iface.AdministratorService;
 import net.thumbtack.onlineshop.service.iface.ProductService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpStatus;
@@ -18,10 +21,13 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
     private final SessionService sessionService;
+    private final AdministratorService administratorService;
 
-    public ProductController(ProductService productService, SessionService sessionService) {
+    public ProductController(ProductService productService, SessionService sessionService,
+                             AdministratorService administratorService) {
         this.productService = productService;
         this.sessionService = sessionService;
+        this.administratorService = administratorService;
     }
 
     @PostMapping("/")
@@ -29,10 +35,7 @@ public class ProductController {
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @RequestBody @Valid ProductDto productDto) {
 
-        Session session = sessionService.getSession(cookie);
-        if (session == null) {
-            throw new SessionDoesntExistException();
-        }
+        checkSession(cookie);
 
         Product product = productService.addProduct(productDto);
         return new ResponseEntity<>(product, HttpStatus.OK);
@@ -43,10 +46,7 @@ public class ProductController {
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable Long id) {
 
-        Session session = sessionService.getSession(cookie);
-        if (session == null) {
-            throw new SessionDoesntExistException();
-        }
+        checkSession(cookie);
 
         Product product = this.productService.getProduct(id);
         return new ResponseEntity<>(product, HttpStatus.OK);
@@ -58,10 +58,7 @@ public class ProductController {
             @PathVariable Long id,
             @RequestBody ProductDto productDto) {
 
-        Session session = sessionService.getSession(cookie);
-        if (session == null) {
-            throw new SessionDoesntExistException();
-        }
+        checkSession(cookie);
 
         Product product = productService.updateProduct(productDto, id);
         return new ResponseEntity<>(product, HttpStatus.OK);
@@ -72,10 +69,7 @@ public class ProductController {
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable Long id) {
 
-        Session session = sessionService.getSession(cookie);
-        if (session == null) {
-            throw new SessionDoesntExistException();
-        }
+        checkSession(cookie);
 
         productService.deleteProduct(id);
         return ResponseEntity.ok().body(null);
@@ -85,12 +79,21 @@ public class ProductController {
     public ResponseEntity<List<Product>> getAllProducts(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
 
+        checkSession(cookie);
+
+        List<Product> allProducts = this.productService.getAllProducts();
+        return new ResponseEntity<>(allProducts, HttpStatus.OK);
+    }
+
+    private void checkSession(@CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
         Session session = sessionService.getSession(cookie);
         if (session == null) {
             throw new SessionDoesntExistException();
         }
 
-        List<Product> allProducts = this.productService.getAllProducts();
-        return new ResponseEntity<>(allProducts, HttpStatus.OK);
+        Administrator administrator = administratorService.getAdministratorById(session.getUserId());
+        if (administrator == null) {
+            throw new SessionAccessDeniedException();
+        }
     }
 }

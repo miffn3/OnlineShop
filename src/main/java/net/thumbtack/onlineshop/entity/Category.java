@@ -21,10 +21,4 @@ public class Category {
     @Column(name = "parent_name")
     private String parentName;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
-            orphanRemoval = true)
-    @JoinColumn(name = "parent_id")
-    private List<Category> categories;
 }

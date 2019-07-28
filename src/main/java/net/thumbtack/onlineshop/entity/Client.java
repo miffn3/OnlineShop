@@ -5,6 +5,9 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -18,7 +21,10 @@ public class Client extends User {
 
     private String phone;
 
-    private Integer deposit;
+    private Long deposit;
 
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    List<BasketItem> products;
 
 }

@@ -4,6 +4,7 @@ import net.thumbtack.onlineshop.dto.request.CategoryCreateRequestDto;
 import net.thumbtack.onlineshop.dto.request.CategoryUpdateRequestDto;
 import net.thumbtack.onlineshop.entity.Category;
 import net.thumbtack.onlineshop.entity.Session;
+import net.thumbtack.onlineshop.service.iface.AdministratorService;
 import net.thumbtack.onlineshop.service.iface.CategoryService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.junit.Before;
@@ -26,10 +27,13 @@ public class CategoriesControllerTest {
     @Mock
     private SessionService sessionService;
 
+    @Mock
+    private AdministratorService administratorService;
+
     @Before
     public void setUpClass() {
         MockitoAnnotations.initMocks(this);
-        underTest = new CategoriesController(this.categoryService, this.sessionService);
+        underTest = new CategoriesController(this.categoryService, this.sessionService, this.administratorService);
     }
 
     @Test

@@ -1,9 +1,11 @@
 package net.thumbtack.onlineshop.controller;
 
 import net.thumbtack.onlineshop.dto.request.ProductDto;
+import net.thumbtack.onlineshop.entity.Administrator;
 import net.thumbtack.onlineshop.entity.Category;
 import net.thumbtack.onlineshop.entity.Product;
 import net.thumbtack.onlineshop.entity.Session;
+import net.thumbtack.onlineshop.service.iface.AdministratorService;
 import net.thumbtack.onlineshop.service.iface.ProductService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.junit.Before;
@@ -28,10 +30,14 @@ public class ProductControllerTest {
     @Mock
     private SessionService sessionService;
 
+    @Mock
+    private AdministratorService administratorService;
+
+
     @Before
     public void setUpClass() {
         MockitoAnnotations.initMocks(this);
-        underTest = new ProductController(this.productService, this.sessionService);
+        underTest = new ProductController(this.productService, this.sessionService, this.administratorService);
     }
 
     @Test

@@ -3,6 +3,7 @@ package net.thumbtack.onlineshop.config;
 import net.thumbtack.onlineshop.repository.iface.*;
 import net.thumbtack.onlineshop.service.iface.*;
 import net.thumbtack.onlineshop.service.impl.*;
+import net.thumbtack.onlineshop.util.DeveloperDataInitializer;
 import net.thumbtack.onlineshop.validation.validator.DuplicateLoginConstraintValidator;
 import net.thumbtack.onlineshop.validation.validator.IncorrectLoginPasswordConstraintValidator;
 import net.thumbtack.onlineshop.validation.validator.IncorrectPasswordConstraintValidator;
@@ -11,6 +12,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class Config {
+
+    @Bean
+    public DeveloperDataInitializer dataInitializer(AdministratorRepository administratorRepository,
+                                                    ClientRepository clientRepository,
+                                                    ProductRepository productRepository,
+                                                    CategoryRepository categoryRepository) {
+        return new DeveloperDataInitializer(administratorRepository, clientRepository, categoryRepository, productRepository);
+    }
 
     @Bean
     public CategoryService categoryService(CategoryRepository categoryRepository) {
@@ -43,6 +52,21 @@ public class Config {
     @Bean
     public ClientService clientService(ClientRepository clientRepository) {
         return new ClientServiceImpl(clientRepository);
+    }
+
+    @Bean
+    public BasketItemService basketItemService(BasketItemRepository basketItemRepository, ClientService clientService,
+                                               ProductRepository productRepository) {
+        return new BasketItemServiceImpl(basketItemRepository, clientService, productRepository);
+    }
+
+    @Bean
+    public DebugService debugService(AdministratorRepository administratorRepository, ClientRepository clientRepository,
+                                     ProductRepository productRepository, CategoryRepository categoryRepository,
+                                     SessionRepository sessionRepository, BasketItemRepository basketItemRepository) {
+        return new DebugServiceImpl(administratorRepository, clientRepository,
+                                    productRepository, categoryRepository,
+                                    sessionRepository, basketItemRepository);
     }
 
     @Bean

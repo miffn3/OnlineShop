@@ -17,4 +17,6 @@ public interface ClientService {
     boolean isLoginExist(String login);
     boolean isUserExist(String login, String password);
     boolean isPasswordCorrect(String password);
+    Long addMoney(Long deposit, Long id);
+    Long getMoney(Long deposit, Long id);
 }
