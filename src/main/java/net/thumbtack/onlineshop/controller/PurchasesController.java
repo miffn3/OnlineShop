@@ -5,12 +5,14 @@ import net.thumbtack.onlineshop.dto.response.PurchaseBasketResponseDto;
 import net.thumbtack.onlineshop.entity.BasketItem;
 import net.thumbtack.onlineshop.entity.Category;
 import net.thumbtack.onlineshop.entity.Client;
+import net.thumbtack.onlineshop.entity.Sales;
 import net.thumbtack.onlineshop.entity.Session;
 import net.thumbtack.onlineshop.exception.BuyingException;
 import net.thumbtack.onlineshop.exception.SessionAccessDeniedException;
 import net.thumbtack.onlineshop.exception.SessionDoesntExistException;
 import net.thumbtack.onlineshop.service.iface.BasketItemService;
 import net.thumbtack.onlineshop.service.iface.ClientService;
+import net.thumbtack.onlineshop.service.iface.SalesService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,12 +36,14 @@ public class PurchasesController {
     private SessionService sessionService;
     private ClientService clientService;
     private BasketItemService basketItemService;
+    private SalesService salesService;
 
     public PurchasesController(SessionService sessionService, ClientService clientService,
-                               BasketItemService basketItemService) {
+                               BasketItemService basketItemService, SalesService salesService) {
         this.sessionService = sessionService;
         this.clientService = clientService;
         this.basketItemService = basketItemService;
+        this.salesService = salesService;
     }
 
     @PostMapping("/")
@@ -88,10 +92,10 @@ public class PurchasesController {
     }
 
     @GetMapping("/")
-    public Page<BasketItem> listRequests(
+    public Page<Sales> listSales(
             @RequestParam(name = "category", required = false) List<Category> categories,
             @NotNull final Pageable pageable) {
-        return null;
+        return salesService.findAll(pageable);
     }
 
     private Client getClient(@CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {

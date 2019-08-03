@@ -1,8 +1,30 @@
 package net.thumbtack.onlineshop.config;
 
-import net.thumbtack.onlineshop.repository.iface.*;
-import net.thumbtack.onlineshop.service.iface.*;
-import net.thumbtack.onlineshop.service.impl.*;
+import net.thumbtack.onlineshop.repository.iface.AdministratorRepository;
+import net.thumbtack.onlineshop.repository.iface.BasketItemRepository;
+import net.thumbtack.onlineshop.repository.iface.CategoryRepository;
+import net.thumbtack.onlineshop.repository.iface.ClientRepository;
+import net.thumbtack.onlineshop.repository.iface.ProductRepository;
+import net.thumbtack.onlineshop.repository.iface.SalesRepository;
+import net.thumbtack.onlineshop.repository.iface.SessionRepository;
+import net.thumbtack.onlineshop.service.iface.AccountService;
+import net.thumbtack.onlineshop.service.iface.AdministratorService;
+import net.thumbtack.onlineshop.service.iface.BasketItemService;
+import net.thumbtack.onlineshop.service.iface.CategoryService;
+import net.thumbtack.onlineshop.service.iface.ClientService;
+import net.thumbtack.onlineshop.service.iface.DebugService;
+import net.thumbtack.onlineshop.service.iface.ProductService;
+import net.thumbtack.onlineshop.service.iface.SalesService;
+import net.thumbtack.onlineshop.service.iface.SessionService;
+import net.thumbtack.onlineshop.service.impl.AccountServiceImpl;
+import net.thumbtack.onlineshop.service.impl.AdministratorServiceImpl;
+import net.thumbtack.onlineshop.service.impl.BasketItemServiceImpl;
+import net.thumbtack.onlineshop.service.impl.CategoryServiceImpl;
+import net.thumbtack.onlineshop.service.impl.ClientServiceImpl;
+import net.thumbtack.onlineshop.service.impl.DebugServiceImpl;
+import net.thumbtack.onlineshop.service.impl.ProductServiceImpl;
+import net.thumbtack.onlineshop.service.impl.SalesServiceImpl;
+import net.thumbtack.onlineshop.service.impl.SessionServiceImpl;
 import net.thumbtack.onlineshop.util.DeveloperDataInitializer;
 import net.thumbtack.onlineshop.validation.validator.DuplicateLoginConstraintValidator;
 import net.thumbtack.onlineshop.validation.validator.IncorrectLoginPasswordConstraintValidator;
@@ -56,8 +78,8 @@ public class Config {
 
     @Bean
     public BasketItemService basketItemService(BasketItemRepository basketItemRepository, ClientService clientService,
-                                               ProductRepository productRepository) {
-        return new BasketItemServiceImpl(basketItemRepository, clientService, productRepository);
+                                               ProductRepository productRepository, SalesService salesService) {
+        return new BasketItemServiceImpl(basketItemRepository, clientService, productRepository, salesService);
     }
 
     @Bean
@@ -67,6 +89,11 @@ public class Config {
         return new DebugServiceImpl(administratorRepository, clientRepository,
                 productRepository, categoryRepository,
                 sessionRepository, basketItemRepository);
+    }
+
+    @Bean
+    public SalesService salesService(SalesRepository salesRepository) {
+        return new SalesServiceImpl(salesRepository);
     }
 
     @Bean

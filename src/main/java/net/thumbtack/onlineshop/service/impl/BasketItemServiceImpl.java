@@ -4,10 +4,12 @@ import net.thumbtack.onlineshop.dto.BasketItemDto;
 import net.thumbtack.onlineshop.entity.BasketItem;
 import net.thumbtack.onlineshop.entity.Client;
 import net.thumbtack.onlineshop.entity.Product;
+import net.thumbtack.onlineshop.entity.Sales;
 import net.thumbtack.onlineshop.repository.iface.BasketItemRepository;
 import net.thumbtack.onlineshop.repository.iface.ProductRepository;
 import net.thumbtack.onlineshop.service.iface.BasketItemService;
 import net.thumbtack.onlineshop.service.iface.ClientService;
+import net.thumbtack.onlineshop.service.iface.SalesService;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -17,11 +19,14 @@ public class BasketItemServiceImpl implements BasketItemService {
     private final BasketItemRepository basketItemRepository;
     private final ClientService clientService;
     private final ProductRepository productRepository;
+    private final SalesService salesService;
 
-    public BasketItemServiceImpl(BasketItemRepository basketItemRepository, ClientService clientService, ProductRepository productRepository) {
+    public BasketItemServiceImpl(BasketItemRepository basketItemRepository, ClientService clientService,
+                                 ProductRepository productRepository, SalesService salesService) {
         this.basketItemRepository = basketItemRepository;
         this.clientService = clientService;
         this.productRepository = productRepository;
+        this.salesService = salesService;
     }
 
     @Override
@@ -63,7 +68,7 @@ public class BasketItemServiceImpl implements BasketItemService {
             return null;
         }
 
-        product.setCount(product.getCount() - 1);
+        product.setCount(product.getCount() - itemDto.getCount());
         client.setDeposit(client.getDeposit() - itemDto.getPrice());
         productRepository.save(product);
         clientService.getMoney(itemDto.getPrice(), id);
@@ -72,6 +77,18 @@ public class BasketItemServiceImpl implements BasketItemService {
         basketItem.setProduct(product);
         basketItem.setCount(0L);
         basketItem.setUserId(id);
+
+        Sales sales = salesService.getSalesByUserIdAndProductId(id, itemDto.getId());
+        if (sales == null) {
+            sales = new Sales();
+            sales.setCount(0L);
+            sales.setPrice(itemDto.getPrice());
+            sales.setProductId(itemDto.getId());
+            sales.setUserId(id);
+        }
+        sales.setCount(sales.getCount() + itemDto.getCount());
+        salesService.addSales(sales);
+
         return basketItemRepository.save(basketItem);
     }
 
@@ -91,7 +108,7 @@ public class BasketItemServiceImpl implements BasketItemService {
     @Override
     public List<BasketItem> buyInBasket(List<BasketItemDto> itemDtoList, Long id) {
         List<BasketItem> bought = new ArrayList<>();
-        for (BasketItemDto item:itemDtoList) {
+        for (BasketItemDto item : itemDtoList) {
             bought.add(buyItem(item, id));
         }
         return bought;

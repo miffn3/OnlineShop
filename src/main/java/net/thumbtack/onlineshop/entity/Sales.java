@@ -7,21 +7,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 
 @Data
 @Entity
-public class Category {
+public class Sales {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @Column(name = "parent_id")
-    private Long parentId;
+    @JoinColumn(name = "product_id")
+    private Long productId;
 
-    @Column(name = "parent_name")
-    private String parentName;
+    private Long count;
 
+    private Long price;
 }

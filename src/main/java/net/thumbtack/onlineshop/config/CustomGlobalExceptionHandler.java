@@ -1,4 +1,4 @@
-package net.thumbtack.onlineshop.controller;
+package net.thumbtack.onlineshop.config;
 
 import net.thumbtack.onlineshop.exception.LoginNotFoundException;
 import net.thumbtack.onlineshop.exception.SessionAccessDeniedException;

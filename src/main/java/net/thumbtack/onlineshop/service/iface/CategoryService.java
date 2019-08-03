@@ -5,7 +5,6 @@ import net.thumbtack.onlineshop.dto.request.CategoryUpdateRequestDto;
 import net.thumbtack.onlineshop.entity.Category;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Set;
 
 @Service
