@@ -20,13 +20,11 @@ public class AccountServiceImpl implements AccountService {
     public User getCurrentUserById(Long id) {
         Administrator administrator = administratorService.getAdministratorById(id);
         Client client = clientService.getClientById(id);
-
-        if ( administrator != null) {
+        if (administrator != null) {
             return administrator;
-        } else if(client != null) {
-            return client;
         } else {
-            return null;
+            client.setProducts(null);
+            return client;
         }
     }
 }

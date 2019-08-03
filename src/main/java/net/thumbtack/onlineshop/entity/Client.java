@@ -15,16 +15,12 @@ import java.util.List;
 @DiscriminatorValue(value = "CLIENT")
 public class Client extends User {
 
-    private String email;
-
-    private String address;
-
-    private String phone;
-
-    private Long deposit;
-
     @OneToMany
     @JoinColumn(name = "user_id")
     List<BasketItem> products;
+    private String email;
+    private String address;
+    private String phone;
+    private Long deposit;
 
 }

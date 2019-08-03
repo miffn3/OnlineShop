@@ -7,7 +7,11 @@ import net.thumbtack.onlineshop.repository.iface.ProductRepository;
 import net.thumbtack.onlineshop.service.iface.CategoryService;
 import net.thumbtack.onlineshop.service.iface.ProductService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 public class ProductServiceImpl implements ProductService {
@@ -28,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
         Set<Category> categories = new HashSet<>();
 
-        for (Long categoryId:productDto.getCategories()) {
+        for (Long categoryId : productDto.getCategories()) {
             categories.add(categoryService.getCategory(categoryId));
         }
 
@@ -44,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(productDto.getPrice());
         product.setName(productDto.getName());
 
-        if (productDto.getCategories() != null){
+        if (productDto.getCategories() != null) {
             if (productDto.getCategories().size() == 0) {
                 product.setCategories(null);
 
@@ -65,21 +69,18 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public void deleteProduct(Long id){
+    public void deleteProduct(Long id) {
         Product product = productRepository.findById(id).get();
-
-        if (product != null) {
-            productRepository.delete(product);
-        }
+        productRepository.delete(product);
     }
 
     @Override
-    public Product getProduct(Long id){
+    public Product getProduct(Long id) {
         return productRepository.findById(id).get();
     }
 
     @Override
-    public List<Product> getAllProducts(){
-        return new ArrayList<>((Collection)productRepository.findAll());
+    public List<Product> getAllProducts() {
+        return new ArrayList<>((Collection) productRepository.findAll());
     }
 }

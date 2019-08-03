@@ -12,7 +12,15 @@ import net.thumbtack.onlineshop.service.iface.CategoryService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 
@@ -34,9 +42,7 @@ public class CategoriesController {
     public ResponseEntity<Category> addCategory(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             CategoryCreateRequestDto createRequestDto) {
-
         checkSession(cookie);
-
         Category category = categoryService.addCategory(createRequestDto);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
@@ -45,9 +51,7 @@ public class CategoriesController {
     public ResponseEntity<Category> getCategory(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable Long id) {
-
         checkSession(cookie);
-
         Category category = categoryService.getCategory(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
@@ -57,9 +61,7 @@ public class CategoriesController {
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable Long id,
             @RequestBody CategoryUpdateRequestDto requestDto) {
-
         checkSession(cookie);
-
         Category category = categoryService.updateCategory(requestDto, id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
@@ -68,9 +70,7 @@ public class CategoriesController {
     public ResponseEntity<Category> deleteCategory(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable Long id) {
-
         checkSession(cookie);
-
         Category category = categoryService.getCategory(id);
         categoryService.deleteCategory(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
@@ -79,11 +79,8 @@ public class CategoriesController {
     @GetMapping("/")
     public ResponseEntity<Set<Category>> getAllCategories(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
-
         checkSession(cookie);
-
         Set<Category> allCategories = categoryService.getAllCategories();
-
         return new ResponseEntity<>(allCategories, HttpStatus.OK);
     }
 
@@ -92,7 +89,6 @@ public class CategoriesController {
         if (session == null) {
             throw new SessionDoesntExistException();
         }
-
         Administrator administrator = administratorService.getAdministratorById(session.getUserId());
         if (administrator == null) {
             throw new SessionAccessDeniedException();

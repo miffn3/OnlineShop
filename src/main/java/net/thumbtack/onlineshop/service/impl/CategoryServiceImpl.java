@@ -8,7 +8,6 @@ import net.thumbtack.onlineshop.service.iface.CategoryService;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class CategoryServiceImpl implements CategoryService {
@@ -48,6 +47,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Set<Category> getAllCategories() {
-        return new HashSet<>((Collection)categoryRepository.findAll());
+        return new HashSet<>((Collection) categoryRepository.findAll());
     }
 }

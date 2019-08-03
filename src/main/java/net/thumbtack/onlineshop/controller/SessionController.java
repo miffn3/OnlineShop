@@ -10,7 +10,12 @@ import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -26,16 +31,12 @@ public class SessionController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<User> logIn(@RequestBody @Valid LogInRequestDto loginData){
-
-
+    public ResponseEntity<User> logIn(@RequestBody @Valid LogInRequestDto loginData) {
         Session session = sessionService.logIn(loginData.getLogin(), loginData.getPassword());
-
         User user = accountService.getCurrentUserById(session.getUserId());
-
-        HttpCookie cookie =  ResponseCookie.from("JAVASESSIONID", session.getCookie())
+        HttpCookie cookie = ResponseCookie.from("JAVASESSIONID", session.getCookie())
                 .path("/")
-                .maxAge(30*60)
+                .maxAge(30 * 60)
                 .build();
         return ResponseEntity
                 .ok()
@@ -44,14 +45,11 @@ public class SessionController {
     }
 
     @DeleteMapping("/")
-    public ResponseEntity logOut(@CookieValue(value = "JAVASESSIONID", defaultValue= "None") String cookie) {
-
-
+    public ResponseEntity logOut(@CookieValue(value = "JAVASESSIONID", defaultValue = "None") String cookie) {
         Session session = sessionService.getSession(cookie);
         if (session == null) {
             throw new SessionDoesntExistException();
         }
-
         sessionService.logOut(cookie);
         return ResponseEntity.ok().body(null);
     }

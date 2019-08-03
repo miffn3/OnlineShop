@@ -25,11 +25,15 @@ public class SessionServiceImpl implements SessionService {
         this.clientService = clientService;
     }
 
+    private static String generateCookieValue() {
+        return UUID.randomUUID().toString();
+    }
+
     @Override
     public Session getSession(String cookie) {
         Set<Session> sessions = getAllSessions();
-        for (Session session:sessions) {
-            if (session.getCookie().equals(cookie)){
+        for (Session session : sessions) {
+            if (session.getCookie().equals(cookie)) {
                 return session;
             }
         }
@@ -38,7 +42,7 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public Set<Session> getAllSessions() {
-        Set<Session> sessions = new HashSet<>((Collection)sessionRepository.findAll());
+        Set<Session> sessions = new HashSet<>((Collection) sessionRepository.findAll());
         return sessions;
     }
 
@@ -55,7 +59,7 @@ public class SessionServiceImpl implements SessionService {
         Administrator administrator = administratorService.getAdminByLogin(login);
         Client client = clientService.getClientByLogin(login);
         if (administrator != null) {
-            if (administratorService.isUserExist(login,password)) {
+            if (administratorService.isUserExist(login, password)) {
                 return addSession(administrator.getId());
             }
         }
@@ -71,9 +75,5 @@ public class SessionServiceImpl implements SessionService {
     public void logOut(String cookie) {
         Session session = getSession(cookie);
         sessionRepository.delete(session);
-    }
-
-    private static String generateCookieValue() {
-        return UUID.randomUUID().toString();
     }
 }

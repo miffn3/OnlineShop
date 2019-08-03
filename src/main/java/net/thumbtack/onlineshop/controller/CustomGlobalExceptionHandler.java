@@ -50,7 +50,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         List<Error> errors = new ArrayList<>();
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
 
-        for (FieldError fieldError:fieldErrors) {
+        for (FieldError fieldError : fieldErrors) {
             Error error = new Error();
             error.setField(fieldError.getField());
             error.setMessage(fieldError.getDefaultMessage());

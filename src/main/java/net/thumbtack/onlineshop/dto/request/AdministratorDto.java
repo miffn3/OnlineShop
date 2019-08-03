@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 public class AdministratorDto {
 
     @NotBlank(message = "First name is mandatory")
-    @Size(max = 50 , message = "First name should be less than 50 symbols")
+    @Size(max = 50, message = "First name should be less than 50 symbols")
     private String firstName;
 
     @NotBlank(message = "Last name is mandatory")

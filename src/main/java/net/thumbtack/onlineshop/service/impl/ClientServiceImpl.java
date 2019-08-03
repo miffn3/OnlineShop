@@ -22,7 +22,7 @@ public class ClientServiceImpl implements ClientService {
     public Client getClientById(Long id) {
         Optional<Client> client = clientRepository.findById(id);
         Client clientTmp = client.orElse(null);
-        if(clientTmp != null) {
+        if (clientTmp != null) {
             clientTmp.setLogin(null);
             clientTmp.setPassword(null);
         }
@@ -31,7 +31,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Set<Client> getAllClients() {
-        return new HashSet<>((Collection)clientRepository.findAll());
+        return new HashSet<>((Collection) clientRepository.findAll());
     }
 
     @Override
@@ -52,22 +52,22 @@ public class ClientServiceImpl implements ClientService {
     public boolean isLoginExist(String login) {
         Set<Client> clients = getAllClients();
 
-        return clients.stream().filter(o -> o.getLogin().equals(login.toLowerCase())).findFirst().isPresent();
+        return clients.stream().anyMatch(o -> o.getLogin().equals(login.toLowerCase()));
     }
 
     @Override
     public boolean isUserExist(String login, String password) {
         Set<Client> clients = getAllClients();
 
-        return clients.stream().filter(o -> o.getLogin().toLowerCase().equals(login.toLowerCase())
-                && o.getPassword().equals(password)).findFirst().isPresent();
+        return clients.stream().anyMatch(o -> o.getLogin().toLowerCase().equals(login.toLowerCase())
+                && o.getPassword().equals(password));
     }
 
     @Override
     public boolean isPasswordCorrect(String password) {
         Set<Client> clients = getAllClients();
 
-        return clients.stream().filter(o -> o.getPassword().toLowerCase().equals(password)).findFirst().isPresent();
+        return clients.stream().anyMatch(o -> o.getPassword().toLowerCase().equals(password));
     }
 
     @Override
@@ -90,9 +90,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getClientByLogin(String login) {
-        Set<Client> clients = new HashSet<>((Collection)clientRepository.findAll());
-        for (Client client:clients) {
-            if(client.getLogin().equals(login.toLowerCase())) {
+        Set<Client> clients = new HashSet<>((Collection) clientRepository.findAll());
+        for (Client client : clients) {
+            if (client.getLogin().equals(login.toLowerCase())) {
                 return client;
             }
         }

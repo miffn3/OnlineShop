@@ -27,11 +27,11 @@ public class DuplicateLoginConstraintValidator implements ConstraintValidator<Du
         boolean adminExist = administratorService.isLoginExist(login);
         boolean clientExist = clientService.isLoginExist(login);
         if (adminExist || clientExist) {
-        ctx.disableDefaultConstraintViolation();
-        ctx.buildConstraintViolationWithTemplate(
-        "User with login "+ login + " is already exist.")
-                .addConstraintViolation();
-        return false;
+            ctx.disableDefaultConstraintViolation();
+            ctx.buildConstraintViolationWithTemplate(
+                    "User with login " + login + " is already exist.")
+                    .addConstraintViolation();
+            return false;
         }
         return true;
     }

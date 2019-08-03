@@ -9,8 +9,12 @@ import java.util.List;
 @Service
 public interface BasketItemService {
     BasketItem addItem(BasketItemDto itemDto, Long id);
+
     BasketItem buyItem(BasketItemDto itemDto, Long id);
+
     void removeItem(Long productId, Long userId);
+
     void changeCount(BasketItemDto item, Long id);
+
     List<BasketItem> buyInBasket(List<BasketItemDto> itemDtoList, Long id);
 }

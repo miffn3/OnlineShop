@@ -65,19 +65,19 @@ public class Config {
                                      ProductRepository productRepository, CategoryRepository categoryRepository,
                                      SessionRepository sessionRepository, BasketItemRepository basketItemRepository) {
         return new DebugServiceImpl(administratorRepository, clientRepository,
-                                    productRepository, categoryRepository,
-                                    sessionRepository, basketItemRepository);
+                productRepository, categoryRepository,
+                sessionRepository, basketItemRepository);
     }
 
     @Bean
     public DuplicateLoginConstraintValidator duplicateLoginConstraintValidator(AdministratorService administratorService,
-                                                                            ClientService clientService) {
+                                                                               ClientService clientService) {
         return new DuplicateLoginConstraintValidator(administratorService, clientService);
     }
 
     @Bean
     public IncorrectLoginPasswordConstraintValidator incorrectLoginPasswordConstraintValidator(AdministratorService administratorService,
-                                                                                          ClientService clientService) {
+                                                                                               ClientService clientService) {
         return new IncorrectLoginPasswordConstraintValidator(administratorService, clientService);
     }
 

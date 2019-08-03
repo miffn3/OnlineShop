@@ -9,7 +9,12 @@ import net.thumbtack.onlineshop.service.iface.ClientService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/deposits")
@@ -24,23 +29,18 @@ public class DepositController {
 
     @PutMapping("/")
     public ResponseEntity<Client> addMoney(
-            @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @RequestBody DepositRequestDto deposit) {
-
         Client client = getClient(cookie);
-
         client.setDeposit(clientService.addMoney(deposit.getDeposit(), client.getId()));
-
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
 
     @GetMapping("/")
     public ResponseEntity<Client> getDeposit(
-            @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie) {
-
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
         Client client = getClient(cookie);
-
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
 

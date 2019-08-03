@@ -32,9 +32,9 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public Administrator getAdministratorById(Long id) {
-        Optional<Administrator> administrator =  administratorRepository.findById(id);
+        Optional<Administrator> administrator = administratorRepository.findById(id);
         Administrator admin = administrator.orElse(null);
-        if(admin != null) {
+        if (admin != null) {
             admin.setLogin(null);
             admin.setPassword(null);
         }
@@ -54,9 +54,9 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public Administrator getAdminByLogin(String login) {
-        Set<Administrator> administrators = new HashSet<>((Collection)administratorRepository.findAll());
-        for (Administrator admin:administrators) {
-            if(admin.getLogin().equals(login.toLowerCase())) {
+        Set<Administrator> administrators = new HashSet<>((Collection) administratorRepository.findAll());
+        for (Administrator admin : administrators) {
+            if (admin.getLogin().equals(login.toLowerCase())) {
                 return admin;
             }
         }
@@ -65,26 +65,26 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public Set<Administrator> getAllAdmins() {
-        return new HashSet<>((Collection)administratorRepository.findAll());
+        return new HashSet<>((Collection) administratorRepository.findAll());
     }
 
     @Override
     public boolean isLoginExist(String login) {
         Set<Administrator> administrators = getAllAdmins();
-        return administrators.stream().filter(o -> o.getLogin().toLowerCase().equals(login.toLowerCase())).findFirst().isPresent();
+        return administrators.stream().anyMatch(o -> o.getLogin().toLowerCase().equals(login.toLowerCase()));
     }
 
     @Override
     public boolean isUserExist(String login, String password) {
         Set<Administrator> administrators = getAllAdmins();
 
-        return administrators.stream().filter(o -> o.getLogin().toLowerCase().equals(login.toLowerCase())
-                && o.getPassword().equals(password)).findFirst().isPresent();
+        return administrators.stream().anyMatch(o -> o.getLogin().toLowerCase().equals(login.toLowerCase())
+                && o.getPassword().equals(password));
     }
 
     @Override
     public boolean isPasswordCorrect(String password) {
         Set<Administrator> administrators = getAllAdmins();
-        return administrators.stream().filter(o -> o.getPassword().equals(password)).findFirst().isPresent();
+        return administrators.stream().anyMatch(o -> o.getPassword().equals(password));
     }
 }

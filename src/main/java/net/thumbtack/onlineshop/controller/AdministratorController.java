@@ -34,35 +34,29 @@ public class AdministratorController {
     }
 
     @PostMapping("/")
-  public ResponseEntity<Administrator> registrationAdmin( @RequestBody @Valid AdministratorDto administratorDto) {
-
-      Administrator admin = administratorService.addAdministrator(administratorDto);
-
-      Session session = sessionService.logIn(admin.getLogin(), admin.getPassword());
-      admin.setLogin(null);
-      admin.setPassword(null);
-      HttpCookie cookie = ResponseCookie.from("JAVASESSIONID", session.getCookie())
-              .path("/api/")
-              .maxAge(30*60)
-              .build();
-
-      return ResponseEntity.ok()
-              .header(HttpHeaders.SET_COOKIE, cookie.toString())
-              .body(admin);
-  }
+    public ResponseEntity<Administrator> registrationAdmin(@RequestBody @Valid AdministratorDto administratorDto) {
+        Administrator admin = administratorService.addAdministrator(administratorDto);
+        Session session = sessionService.logIn(admin.getLogin(), admin.getPassword());
+        admin.setLogin(null);
+        admin.setPassword(null);
+        HttpCookie cookie = ResponseCookie.from("JAVASESSIONID", session.getCookie())
+                .path("/api/")
+                .maxAge(30 * 60)
+                .build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(admin);
+    }
 
     @PutMapping("/")
     public ResponseEntity<Administrator> editAdmin(
-            @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @RequestBody @Valid AdministratorUpdateRequestDto updateRequestDto) {
-
         Session session = sessionService.getSession(cookie);
         if (session == null) {
             throw new SessionDoesntExistException();
         }
-
         Administrator administrator = this.administratorService.editAdmin(updateRequestDto, session.getUserId());
-
         return new ResponseEntity<>(administrator, HttpStatus.OK);
     }
 

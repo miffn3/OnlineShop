@@ -15,7 +15,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -35,21 +41,19 @@ public class ClientController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Set<Client>> getAllClients(@CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
-
+    public ResponseEntity<Set<Client>> getAllClients(@CookieValue(value = "JAVASESSIONID",
+            defaultValue = "none") String cookie) {
         Session session = sessionService.getSession(cookie);
         if (session == null) {
             throw new SessionDoesntExistException();
         }
-
         Administrator administrator = administratorService.getAdministratorById(session.getUserId());
         if (administrator == null) {
             throw new SessionAccessDeniedException();
         }
-
         Set<Client> clients = this.clientService.getAllClients();
         Set<Client> allClients = new HashSet<>();
-        for (Client client:clients) {
+        for (Client client : clients) {
             client.setDeposit(null);
             client.setLogin(null);
             client.setPassword(null);
@@ -61,7 +65,6 @@ public class ClientController {
 
     @PostMapping("/")
     public ResponseEntity<Client> registrationClient(@RequestBody ClientDto clientDto) {
-
         Client client = clientService.addClient(clientDto);
         Session session = sessionService.logIn(client.getLogin(), client.getPassword());
         client.setLogin(null);
@@ -70,7 +73,7 @@ public class ClientController {
         client.setProducts(null);
         HttpCookie cookie = ResponseCookie.from("JAVASESSIONID", session.getCookie())
                 .path("/api/")
-                .maxAge(30*60)
+                .maxAge(30 * 60)
                 .build();
 
         return ResponseEntity.ok()
@@ -80,14 +83,12 @@ public class ClientController {
 
     @PutMapping("/")
     public ResponseEntity<Client> editClient(
-            @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @RequestBody @Valid ClientUpdateRequestDto updateRequestDto) {
-
         Session session = sessionService.getSession(cookie);
         if (session == null) {
             throw new SessionDoesntExistException();
         }
-
         Client client = this.clientService.editClient(updateRequestDto, session.getUserId());
 
         return new ResponseEntity<>(client, HttpStatus.OK);

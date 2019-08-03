@@ -17,7 +17,7 @@ import static javax.persistence.DiscriminatorType.STRING;
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", discriminatorType=STRING, length=20)
+@DiscriminatorColumn(name = "user_type", discriminatorType = STRING, length = 20)
 public abstract class User {
 
     @Id

@@ -31,7 +31,7 @@ public class IncorrectLoginPasswordConstraintValidator implements ConstraintVali
         if (!adminLoginExist && !clientLoginExist) {
             ctx.disableDefaultConstraintViolation();
             ctx.buildConstraintViolationWithTemplate(
-            "User with login "+ request.getLogin()+ " does not exist.")
+                    "User with login " + request.getLogin() + " does not exist.")
                     .addPropertyNode("login")
                     .addConstraintViolation();
             return false;

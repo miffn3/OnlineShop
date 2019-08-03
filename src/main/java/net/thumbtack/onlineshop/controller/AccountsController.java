@@ -25,15 +25,11 @@ public class AccountsController {
     @GetMapping("/")
     public ResponseEntity<User> getCurrentUser(
             @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
-
         Session session = sessionService.getSession(cookie);
-
         if (session == null) {
             throw new SessionDoesntExistException();
         }
-
         User user = accountService.getCurrentUserById(session.getUserId());
-
         return ResponseEntity
                 .ok()
                 .body(user);

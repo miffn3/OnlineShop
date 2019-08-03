@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 @Data
 public class AdministratorUpdateRequestDto {
 
-    @Size(max = 50 , message = "First name should be less than 50 symbols")
+    @Size(max = 50, message = "First name should be less than 50 symbols")
     private String firstName;
 
     @Size(max = 50, message = "Last name should be less than 50 symbols")

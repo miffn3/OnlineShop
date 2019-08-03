@@ -11,10 +11,12 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy= IncorrectPasswordConstraintValidator.class)
+@Constraint(validatedBy = IncorrectPasswordConstraintValidator.class)
 public @interface IncorrectPassword {
     String message() default "Incorrect password";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
 }

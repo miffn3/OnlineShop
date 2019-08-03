@@ -10,6 +10,7 @@ import net.thumbtack.onlineshop.service.iface.BasketItemService;
 import net.thumbtack.onlineshop.service.iface.ClientService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BasketItemServiceImpl implements BasketItemService {
@@ -28,20 +29,19 @@ public class BasketItemServiceImpl implements BasketItemService {
     public BasketItem addItem(BasketItemDto itemDto, Long id) {
         BasketItem basketItem;
 
-        if(basketItemRepository.findBasketItemByProductIdAndUserId(itemDto.getId(), id).isPresent()) {
+        if (itemDto.getCount() == null) {
+            itemDto.setCount(1L);
+        }
+
+        if (basketItemRepository.findBasketItemByProductIdAndUserId(itemDto.getId(), id).isPresent()) {
             basketItem = basketItemRepository.findBasketItemByProductIdAndUserId(itemDto.getId(), id).get();
         } else {
             basketItem = new BasketItem();
             basketItem.setUserId(id);
             basketItem.setCount(itemDto.getCount());
-            System.out.println(itemDto.getId());
             Product product = productRepository.findById(itemDto.getId()).get();
             basketItem.setProduct(product);
             return basketItemRepository.save(basketItem);
-        }
-
-        if(itemDto.getCount() == null) {
-            itemDto.setCount(1L);
         }
 
         Long count = itemDto.getCount() + basketItem.getCount();
@@ -90,6 +90,10 @@ public class BasketItemServiceImpl implements BasketItemService {
 
     @Override
     public List<BasketItem> buyInBasket(List<BasketItemDto> itemDtoList, Long id) {
-        return null;
+        List<BasketItem> bought = new ArrayList<>();
+        for (BasketItemDto item:itemDtoList) {
+            bought.add(buyItem(item, id));
+        }
+        return bought;
     }
 }

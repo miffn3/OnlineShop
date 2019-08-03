@@ -11,7 +11,15 @@ import net.thumbtack.onlineshop.service.iface.ClientService;
 import net.thumbtack.onlineshop.service.iface.SessionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,17 +40,15 @@ public class BasketsController {
 
     @PostMapping("/")
     public ResponseEntity<List<BasketItemDto>> addBasketItem(
-            @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @RequestBody BasketItemDto item) {
-
         Client client = getClient(cookie);
-
         List<BasketItemDto> basketItems = new ArrayList<>();
         basketItemService.addItem(item, client.getId());
-        List<BasketItem> list = client.getProducts();
 
-        for (BasketItem basketItem:list) {
-            BasketItemDto  basketItemDto = new BasketItemDto();
+        List<BasketItem> list = client.getProducts();
+        for (BasketItem basketItem : list) {
+            BasketItemDto basketItemDto = new BasketItemDto();
             basketItemDto.setCount(basketItem.getCount());
             basketItemDto.setId(basketItem.getProduct().getId());
             basketItemDto.setName(basketItem.getProduct().getName());
@@ -54,26 +60,23 @@ public class BasketsController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity removeItem(
-            @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @PathVariable Long id) {
         Client client = getClient(cookie);
-
         basketItemService.removeItem(id, client.getId());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/")
     public ResponseEntity<List<BasketItemDto>> changeCountOfItem(
-            @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie,
             @RequestBody BasketItemDto item) {
-
         Client client = getClient(cookie);
         basketItemService.changeCount(item, client.getId());
         List<BasketItemDto> basketItems = new ArrayList<>();
         List<BasketItem> list = client.getProducts();
-
-        for (BasketItem basketItem:list) {
-            BasketItemDto  basketItemDto = new BasketItemDto();
+        for (BasketItem basketItem : list) {
+            BasketItemDto basketItemDto = new BasketItemDto();
             basketItemDto.setCount(basketItem.getCount());
             basketItemDto.setId(basketItem.getProduct().getId());
             basketItemDto.setName(basketItem.getProduct().getName());
@@ -85,16 +88,12 @@ public class BasketsController {
 
     @GetMapping("/")
     public ResponseEntity<List<BasketItemDto>> getBasketItem(
-            @CookieValue(value = "JAVASESSIONID", defaultValue="none") String cookie,
-            @RequestBody BasketItemDto item) {
-
+            @CookieValue(value = "JAVASESSIONID", defaultValue = "none") String cookie) {
         Client client = getClient(cookie);
-
         List<BasketItemDto> basketItems = new ArrayList<>();
         List<BasketItem> list = client.getProducts();
-
-        for (BasketItem basketItem:list) {
-            BasketItemDto  basketItemDto = new BasketItemDto();
+        for (BasketItem basketItem : list) {
+            BasketItemDto basketItemDto = new BasketItemDto();
             basketItemDto.setCount(basketItem.getCount());
             basketItemDto.setId(basketItem.getProduct().getId());
             basketItemDto.setName(basketItem.getProduct().getName());
@@ -109,7 +108,6 @@ public class BasketsController {
         if (session == null) {
             throw new SessionDoesntExistException();
         }
-
         Client client = clientService.getClientById(session.getUserId());
 
         if (client == null) {

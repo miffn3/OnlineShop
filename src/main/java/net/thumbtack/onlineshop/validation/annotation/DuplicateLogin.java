@@ -11,10 +11,12 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy= DuplicateLoginConstraintValidator.class)
+@Constraint(validatedBy = DuplicateLoginConstraintValidator.class)
 public @interface DuplicateLogin {
     String message() default "User with this login is already exist";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
 }
